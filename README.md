@@ -107,15 +107,25 @@ To maintain consistency across the project:
 - **Commit messages** → Follow [Conventional Commit Messages](#commit-messages-conventional-commits)
   - Examples: `feat(auth): add login endpoint`, `fix(listings): correct filter by genre query`
 
+### In short terms:
+- **Branches**&emsp;&emsp;&emsp;&emsp;&emsp;: `type/scope/snake_case_description`
+- **Commit messages**&emsp;: `<type>(scope): short description`
+
 ### Code
 - **Variables** → `snake_case`
 - **Classes** → `PascalCase`
 - **Constants** → `ALL_CAPS`
 - **Django migrations** → Auto-generated (do not rename)
-
+---
 ## Git Workflow
 
 We use a feature-branch workflow to keep the `main` branch stable.
+
+### Branch Naming
+**Format:**
+```
+type/scope/snake_case_description
+```
 
 ### Branch Types
 - `setup/` → initial project setup (e.g., Django project, `.gitignore`, configs).
@@ -125,20 +135,20 @@ We use a feature-branch workflow to keep the `main` branch stable.
 - `chore/` → Maintenance (config, dependencies, cleanup)
 - `docs/` → Documentation changes (README, comments, guides)
 
-### Branch Naming
-**Format:**
-```
-type/scope/snake_case_description
-```
-
-`scope` is the file, app, or area affected (`accounts`, `listings`, `templates`)
-   - Example: `feature/accounts/user_authentication`, `fix/listings/listings_filter_bug`
-
 #### Rule of Thumb:
 - If it changes how the system behaves = `feature/`. 
 - If it only fixes something broken = `fix/`. 
 - If it cleans up without changing behavior = `refactor/`.
 
+### Scope
+
+`scope` is the main component/area of changes:
+- `accounts`, `listings` - for app-specific changes
+- `project` - for project-wide changes (settings, global templates)  
+- `frontend`, `api`, `database` - for layer-specific changes
+- Example: `feature/accounts/user_authentication`, `fix/project/static_config`
+
+---
 ### Commit Messages [(Conventional Commits)](www.conventionalcommits.org)
 
 **Format:**
@@ -158,13 +168,14 @@ test(accounts): add login integration test
 ```
 
 **Guidelines:**
-- Keep messages present-tense and concise
-    - Example: `add login functionality` not `added login functionality`
 - `(scope)` is the app or area affected (`accounts`, `listings`, `templates`)
+- Keep messages present-tense and concise
+    - Example: `add` not `added`, `fix` not `fixed`
 - One logical change per commit
 - Limit commit message titles under 50 characters
 - The body of the commit message should be wrapped at 72 characters
 
+---
 ### Workflow Steps
 
 #### When to Create a Branch
@@ -177,7 +188,10 @@ Use `feature/` branch when:
 
 **Bug fixes** → `fix/` branch
 
-**Small CSS tweaks or typo fixes** → can be committed to existing open feature branch
+**Small fixes** → create a quick branch even for small changes/tweaks
+- `hotfix/accounts/fix_typo_login_form`
+- `chore/frontend/adjust_button_spacing` 
+- Quick to create, keeps changes isolated, easier to review, and keeps main protected
 
 #### Typical Flow
 ```bash
@@ -207,6 +221,7 @@ git pull origin main
 - PR description should explain what changed and how to test
 - At least one reviewer must approve before merging to `main`
 
+---
 ## Static File Organization
 
 ### Structure & Naming Rules
@@ -241,7 +256,7 @@ static/
 - Filenames in `snake_case`: `band_card_bg.svg`, `musician_avatar_placeholder.png`
 - Prefer `assets/` directory (covers SVGs, PNGs, icons, fonts)
 - Always reference static files with Django's `{% static %}` tag (do not hardcode `/static/` paths)
-
+---
 ## Contribution Guidelines
 
 - Follow the Git workflow described above
@@ -251,7 +266,7 @@ static/
 - Test your changes before submitting a PR
 - Do not commit environment files (`.env`) or virtual environment directories (`env/`)
 - Do not commit IDE-specific files (`.vscode/`, `.idea/`, etc.)
-
+---
 ## Final Notes
 > Always branch off `main` and run `git status` before every add, commit, or push.
 
