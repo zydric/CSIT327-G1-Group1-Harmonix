@@ -387,7 +387,7 @@ git push origin feature/scope/description  # ✅ Correct
 python -m venv env
 
 # Activate (every time you start work)
-env\Scripts\activate          # Windows
+env\Scripts\activate          
 
 # Deactivate when you're done for the day
 deactivate
