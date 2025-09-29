@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome to Harmonix{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen relative">
+    <!-- Background image with overlay -->
+    <div class="absolute inset-0 z-0">
+        <img src="{% static 'images/harmonix_background.jpg' %}" alt="Concert" class="w-full h-full object-cover mix-blend-overlay">
+    </div> 
+
+    <!-- Content -->
+    <div class="relative z-10 min-h-screen flex flex-col">
+        <!-- Navbar -->
+        <nav class="md:px-16 lg:px-24 py-6">
+            <div class="flex items-center">
+                <div class="w-10 h-10 flex items-center justify-center mr-3">
+                    <img src="{% static 'images/harmonix_logo.png' %}" alt="Harmonix Logo">
+                </div>
+                <h1 class="text-purple-900 text-2xl font-bold">Harmonix</h1>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="flex-1 flex items-center px-8 md:px-16 lg:px-24">
+            <div class="max-w-3xl">
+                <h2 class="text-white text-6xl md:text-7xl font-bold mb-6 leading-tight">
+                    HARMONIX
+                </h2>
+                <p class="text-white text-xl md:text-2xl mb-4 font-light italic">
+                    Where musicians meet, bands form, and gigs begin.
+                </p>
+                <p class="text-white text-lg md:text-xl mb-8">
+                    Plug in. Play out. Register now!
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex gap-4 text-center">
+                    <a href="#" 
+                       class="w-40 px-8 py-3 bg-white text-purple-700 rounded-full font-semibold hover:bg-gray-100 transition">
+                        Register
+                    </a>
+                    <a href="#" 
+                       class="w-40 px-8 py-3 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white/10 transition">
+                        Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="px-8 py-6 text-center">
+            <p class="text-white text-sm">© 2025 Harmonix</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
