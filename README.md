@@ -33,17 +33,16 @@ env\Scripts\activate
 
 ### 2. Install Dependencies
 ```bash
-# Make sure you're in the virtual environment (see (env) in prompt)
+# 1. Make sure you're in the virtual environment (see (env) in prompt)
 pip install -r requirements.txt
 
-# If requirements.txt is missing or empty, install Django manually:
-pip install django
+# 2. Create a new file named .env in the project root (same folder as manage.py) 
+#    and paste the DATABASE_URL in that file.
 ```
 
 ### 3. Database Setup
 ```bash
 python manage.py migrate
-python manage.py createsuperuser  # Optional: for admin access
 ```
 
 ### 4. Start Development
