@@ -1,10 +1,13 @@
 gitignore
+
 # Python bytecode files
 __pycache__/
 *.py[cod]
 *$py.class
+
 # Virtual environment
 venv/
+
 # Django-specific files
 *.log
 *.pot
@@ -14,18 +17,23 @@ venv/
 *.sqlite3
 db.sqlite3
 media/
+
 # Static files
 staticfiles/
 static_root/
+
 # Environment variables
 .env
 *.env
+
 # IDE settings
 .vscode/
 .idea/
+
 # OS-specific files
 .DS_Store
 Thumbs.db
+
 # Coverage/testing
 htmlcov/
 .tox/
@@ -36,6 +44,7 @@ coverage.xml
 .cache
 nosetests.xml
 test.db
+
 # Build/packaging
 *.egg
 *.egg-info/
@@ -50,16 +59,20 @@ develop-eggs/
 lib/
 lib64/
 __pycache__/
+
 # Pip logs
 pip-log.txt
 pip-delete-this-directory.txt
+
 # MyPy/Pyre/Pytype
 .mypy_cache/
 .dmypy.json
 dmypy.json
 .pyre/
 .pytype/
+
 # Jupyter Notebook
 .ipynb_checkpoints
+
 # Local settings
 local_settings.py
