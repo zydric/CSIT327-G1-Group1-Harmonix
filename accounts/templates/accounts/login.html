@@ -25,16 +25,16 @@
             {% csrf_token %}
             <div class="rounded-md space-y-3">
                 <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <label for="username" class="block font-medium text-gray-700">Username</label>
                     <input id="username" name="username" type="text" required
                         class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Username" value="{{ request.POST.username }}">
+                        value="{{ request.POST.username }}">
                 </div>
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <label for="password" class="block font-medium text-gray-700">Password</label>
                     <input id="password" name="password" type="password" required
                         class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="">
+                    >
                 </div>
             </div>
 
