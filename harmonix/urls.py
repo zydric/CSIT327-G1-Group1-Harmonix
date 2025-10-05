@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('home/', views.home, name='home'),
+    path('api/', include('harmonix.api.urls')),
 ]
