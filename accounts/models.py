@@ -21,9 +21,15 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser, PermissionsMixin):
+    ROLE_CHOICES = [
+        ('musician', 'Musician'),
+        ('band', 'Band Admin'),
+        ('admin', 'Administrator'),
+    ]
+
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=50)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='musician')
     date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -34,4 +40,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['username']
 
     def __str__(self):
-        return self.username
+        return f"{self.username} ({self.role})"
+
+    # --- helper methods for cleaner role checks ---
+    @property
+    def is_musician(self):
+        return self.role == 'musician'
+
+    @property
+    def is_band_admin(self):
+        return self.role == 'band'
