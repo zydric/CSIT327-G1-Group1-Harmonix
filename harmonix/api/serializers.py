@@ -38,23 +38,20 @@ class RegistrationSerializer(serializers.Serializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    username = serializers.CharField()
     password = serializers.CharField(write_only=True, style={"input_type": "password"})
 
     def validate(self, attrs):
-        email = attrs.get("email")
+        username = attrs.get("username")
         password = attrs.get("password")
 
-        if email and password:
-            # With USERNAME_FIELD='email', pass email as username to authenticate
-            user = authenticate(username=email, password=password)
+        if username and password:
+            user = authenticate(username=username, password=password)
             if not user:
-                raise serializers.ValidationError("Invalid email or password.")
+                raise serializers.ValidationError("Invalid username or password.")
             if not user.is_active:
                 raise serializers.ValidationError("This account is inactive.")
             attrs["user"] = user
             return attrs
 
-        raise serializers.ValidationError("Must include 'email' and 'password'.")
-
-
+        raise serializers.ValidationError("Must include 'username' and 'password'.")
