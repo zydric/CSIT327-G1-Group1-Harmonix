@@ -2,15 +2,32 @@
 
 A web platform designed to connect musicians and bands with opportunities, enabling collaboration, networking, and community building.
 
-## Overview
-
-Harmonix is built with Django and follows a modular, scalable structure to support future feature expansion. The platform provides musicians and bands with tools to showcase their talents and discover new opportunities in the music industry.
-
 ## Goals
 
 - Provide a simple and reliable way for musicians and bands to showcase themselves
 - Enable discovery and listings of opportunities (e.g., auditions, gigs, collaborations)
 - Lay the foundation for scalable features such as user accounts, profiles, and listings
+
+---
+
+## Tech Stack
+
+- **Backend:** Django (Python web framework)
+- **Database:** Supabase (PostgreSQL)
+- **Frontend:** Tailwind CSS
+- **Hosting:** Render
+
+## Team Members
+
+| Name | Role | Email |
+|------|------|-------|
+| Zydric Abel | Lead Developer | zydric.abel@cit.edu |
+| Zander Aligato | Backend Developer | zander.aligato@cit.edu |
+| Treasure Louise Abadinas | Frontend Developer | treasurelouise.abadinas@cit.edu |
+
+## Deployed Application
+
+**Live Demo:** [Harmonix on Render - Coming Soon]
 
 ---
 
@@ -64,9 +81,9 @@ env\Scripts\activate    # You MUST see (env) in your prompt
 ## Branch Protection & Workflow Rules
 
 ### Main Branch is Protected
-- **❌ NO direct commits to `main`** - pushes will be **rejected**
-- **✅ ALL changes require Pull Requests** with approval
-- **✅ Create branches for EVERY change** - even one-line fixes
+- **NO direct commits to `main`** - pushes will be **rejected**
+- **ALL changes require Pull Requests** with approval
+- **Create branches for EVERY change** - even one-line fixes
 
 ### If You Accidentally Commit to Main
 Don't panic! Here's how to fix it:
