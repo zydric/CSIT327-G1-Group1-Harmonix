@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
-from django.contrib.auth import login as django_login, get_user_model
-from .serializers import RegistrationSerializer
+from django.contrib.auth import login as django_login, authenticate
+from .serializers import RegistrationSerializer, LoginSerializer
 
 # Placeholder views (logic to be implemented in next phase)
 class RegisterView(APIView):
@@ -31,7 +31,19 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        return Response({"message": "Login endpoint placeholder"})
+        serializer = LoginSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        user = serializer.validated_data["user"]
+        django_login(request, user)
+
+        return Response({
+            "id": user.id,
+            "email": user.email,
+            "username": user.username,
+            "role": user.role,
+        }, status=status.HTTP_200_OK)
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
