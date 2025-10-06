@@ -1,13 +1,31 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import status
+from django.contrib.auth import login as django_login, get_user_model
+from .serializers import RegistrationSerializer
 
 # Placeholder views (logic to be implemented in next phase)
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        return Response({"message": "Register endpoint placeholder"})
+        serializer = RegistrationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        user = serializer.save()
+
+        # Log the user in using session auth
+        django_login(request, user)
+
+        response_data = {
+            "id": user.id,
+            "email": user.email,
+            "username": user.username,
+            "role": user.role,
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
