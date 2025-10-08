@@ -54,10 +54,6 @@ def register(request):
 
 @csrf_protect
 def login_view(request):
-    # Redirect if already logged in
-    if request.user.is_authenticated:
-        return redirect('home')
-    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
