@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from . import views
@@ -22,6 +23,5 @@ urlpatterns = [
     path('', views.landing_page, name='landing'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('home/', views.home, name='home'),
-    path('api/', include('harmonix.api.urls')),
+    #path('api/', include('accounts.urls')), 
 ]
