@@ -28,7 +28,6 @@ class RegistrationSerializer(serializers.Serializer):
         return value
 
     def create(self, validated_data):
-        # Use the custom manager to ensure proper password hashing and defaults
         return User.objects.create_user(
             username=validated_data["username"],
             email=validated_data["email"],
@@ -55,3 +54,5 @@ class LoginSerializer(serializers.Serializer):
             return attrs
 
         raise serializers.ValidationError("Must include 'username' and 'password'.")
+
+
