@@ -70,7 +70,7 @@ def login_view(request):
             messages.success(request, f'Welcome back, {user.username}!')
             
             # Redirect to next page if specified, otherwise home
-            next_page = request.GET.get('next', 'home')
+            next_page = request.GET.get('next', 'home_view')
             return redirect(next_page)
         else:
             messages.error(request, 'Invalid username or password!')

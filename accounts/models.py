@@ -2,6 +2,10 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 from django.utils import timezone
 
+
+# ============================
+# Custom User Manager
+# ============================
 class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None, role='musician'):
         if not email:
@@ -9,7 +13,6 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(username=username, email=email, role=role)
         user.set_password(password)
-        user.date_joined = timezone.now()
         user.save(using=self._db)
         return user
 
@@ -20,6 +23,10 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
+# ============================
+# User Table
+# ============================
 class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = [
         ('musician', 'Musician'),
@@ -31,6 +38,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='musician')
     date_joined = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)   # new timestamp
+    updated_at = models.DateTimeField(auto_now=True)       # new timestamp
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -42,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f"{self.username} ({self.role})"
 
-    # --- helper methods for cleaner role checks ---
+    # Helper properties
     @property
     def is_musician(self):
         return self.role == 'musician'
@@ -50,3 +59,32 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_band_admin(self):
         return self.role == 'band'
+
+
+# ============================
+# Musician Table
+# ============================
+class Musician(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='musician_profile')
+    bio = models.TextField(blank=True)
+    instruments = models.CharField(max_length=255, blank=True)
+    genres = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Musician: {self.user.username}"
+
+
+# ============================
+# Band Table
+# ============================
+class Band(models.Model):
+    band_name = models.CharField(max_length=255)
+    members = models.ManyToManyField(Musician, related_name='bands')
+    genre = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.band_name
