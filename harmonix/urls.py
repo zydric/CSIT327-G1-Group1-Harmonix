@@ -24,5 +24,4 @@ urlpatterns = [
     path('home/', views.home_view, name='home_view'),  # Protected home
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('api/accounts/', include('accounts.api.urls')),
 ]
