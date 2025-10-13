@@ -2,6 +2,9 @@
 {% load static %}
 
 {% block content %}
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
 <div class="min-h-screen relative bg-white">
 
     <nav class="flex justify-between items-center md:px-16 lg:px-24 py-6">
@@ -17,7 +20,7 @@
             <a href="#" class="hover:text-purple-600 transition-colors">HOME</a>
             <a href="#" class="hover:text-purple-600 transition-colors">PROFILE</a>
             <a href="#" class="hover:text-purple-600 transition-colors">LISTINGS</a>
-            <a href="#" class="hover:text-purple-600 transition-colors">LOGOUT</a>
+            <a href="{% url 'logout' %}" class="hover:text-purple-600 transition-colors">LOGOUT</a>
         </div>
     </nav>
 
