@@ -98,12 +98,13 @@ def get_profile(request):
 @permission_classes([IsAuthenticated])
 def edit_profile(request):
     user = request.user
-    data = request.data
+    serializer = UserSerializer(user, data=request.data, partial=True)  # partial=True = only update fields provided
 
-    user.location = data.get('location', user.location)
-    user.genres = data.get('genres', user.genres)
-    user.instruments = data.get('instruments', user.instruments)
-    user.save()
-
-    serializer = UserSerializer(user)
-    return Response({'message': 'Profile updated successfully!', 'user': serializer.data})
+    if serializer.is_valid():
+        serializer.save()
+        return Response({
+            'message': 'Profile updated successfully!',
+            'user': serializer.data
+        })
+    else:
+        return Response(serializer.errors, status=400)
