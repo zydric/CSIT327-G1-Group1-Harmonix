@@ -3,6 +3,12 @@ from django.contrib.auth import login as auth_login, authenticate, logout
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
+#REST FRAMEWORKS
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .serializers import UserSerializer
+
 from .models import User
 
 @csrf_protect
@@ -79,3 +85,26 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
     return redirect('login')
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request):
+    user = request.user
+    serializer = UserSerializer(user)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def edit_profile(request):
+    user = request.user
+    serializer = UserSerializer(user, data=request.data, partial=True)  # partial=True = only update fields provided
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response({
+            'message': 'Profile updated successfully!',
+            'user': serializer.data
+        })
+    else:
+        return Response(serializer.errors, status=400)
