@@ -33,10 +33,10 @@
             {% csrf_token %}
             <div class="rounded-md space-y-3">
                 <div>
-                    <label for="role" class="block font-medium text-gray-700">Role</label>
+                    <label for="role" class="block font-medium text-gray-700">Register as</label>
                     <select id="role" name="role" required
                             class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="" disabled selected>Choose role</option>
+                        <option value="" disabled selected>Choose user type</option>
                         <option value="musician" {% if request.POST.role == 'musician' %}selected{% endif %}>Musician</option>
                         <option value="band" {% if request.POST.role == 'band' %}selected{% endif %}>Band</option>
                     </select>
