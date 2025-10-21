@@ -8,5 +8,5 @@ urlpatterns = [
 
     #Profile & Edit Profile Urls
     path('profile/', views.get_profile, name='get_profile'),
-    path('profile/edit/', views.edit_profile, name='edit_profile'),
+    # path('profile/edit/', views.edit_profile, name='edit_profile'),
 ]
