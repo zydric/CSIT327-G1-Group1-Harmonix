@@ -87,12 +87,8 @@ def logout_view(request):
     return redirect('login')
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def get_profile(request):
-    user = request.user
-    serializer = UserSerializer(user)
-    return Response(serializer.data)
+    return render(request, 'accounts/musician_profile.html')
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
@@ -108,3 +104,4 @@ def edit_profile(request):
         })
     else:
         return Response(serializer.errors, status=400)
+        
