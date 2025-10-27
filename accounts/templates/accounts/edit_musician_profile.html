@@ -80,11 +80,13 @@
                             </div>
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Email Address</label>
-                                <input type="email" id="editEmail" name="email" value="{{ user.email }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                                <!-- Email is now readonly, styled as disabled, and has no 'name' attribute -->
+                                <input type="email" id="editEmail" value="{{ user.email }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 bg-gray-100 cursor-not-allowed" style="--tw-ring-color: var(--primary-color);" readonly>
                             </div>
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Role</label>
-                                <input type="text" id="editRole" name="role" value="{{ user.role|default_if_none:'' }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                                <!-- Role is now readonly, styled as disabled, and has no 'name' attribute -->
+                                <input type="text" id="editRole" value="{{ user.role|default_if_none:'' }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 bg-gray-100 cursor-not-allowed" style="--tw-ring-color: var(--primary-color);" readonly>
                             </div>
                         </div>
 
