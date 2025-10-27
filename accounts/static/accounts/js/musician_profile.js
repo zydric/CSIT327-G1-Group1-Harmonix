@@ -1,3 +1,4 @@
+//TO DISABLE
 const profileData = {
   name: "Juan Dela Cruz",
   role: "Musician",
@@ -20,6 +21,7 @@ function cancelEdit() {
 
 function loadEditForm() {
   document.getElementById("editFullName").value = profileData.name
+
   document.getElementById("editEmail").value = profileData.email
   document.getElementById("editRole").value = profileData.role
   document.getElementById("editInstruments").value = profileData.instruments

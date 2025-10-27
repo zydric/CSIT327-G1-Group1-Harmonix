@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-color: #4F2FC0;
+            --light-bg: #E8E0F5;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4">
+    <div id="app" class="max-w-2xl mx-auto">
+
+        <!-- The viewMode div has been completely removed from this file -->
+
+        <!-- Edit Mode - Now always visible -->
+        <div id="editMode">
+            
+            <div class="mb-8 flex items-center relative">
+                <button onclick="window.history.back()" class="text-gray-600 hover:text-gray-900 transition absolute left-0 top-1/2 -translate-y-1/2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <h1 class="text-3xl font-bold text-center mx-auto" style="color: var(--primary-color);">EDIT PROFILE</h1>
+            </div>
+
+            
+            <div class="bg-white rounded-2xl shadow-sm p-8 mb-8">
+                
+                <div class="flex items-start justify-between mb-8">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center relative group">
+                            <span class="text-gray-500 text-2xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                            <button class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 rounded-full flex items-center justify-center transition opacity-0 group-hover:opacity-100 cursor-pointer">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <input type="text" id="editNameHeader" placeholder="Name" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                            <input type="text" id="editRoleHeader" placeholder="Role" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                            <input type="text" id="editLocationHeader" placeholder="Location" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                        </div>
+                    </div>
+                    <button class="font-semibold transition hover:opacity-80" style="color: var(--primary-color);">Upload New</button>
+                </div>
+
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-6">Personal Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="text-gray-600 text-sm mb-2 block">Full Name</label>
+                                <input type="text" id="editFullName" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                            </div>
+                            <div>
+                                <label class="text-gray-600 text-sm mb-2 block">Email Address</label>
+                                <input type="email" id="editEmail" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                            </div>
+                            <div>
+                                <label class="text-gray-600 text-sm mb-2 block">Role</label>
+                                <input type="text" id="editRole" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                            </div>
+                        </div>
+
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="text-gray-600 text-sm mb-2 block">Instrument/s</label>
+                                <input type="text" id="editInstruments" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                            </div>
+                            <div>
+                                <label class="text-gray-600 text-sm mb-2 block">Genre/s</label>
+                                <input type="text" id="editGenres" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                            </div>
+                            <div>
+                                <label class="text-gray-600 text-sm mb-2 block">Location</label>
+                                <input type="text" id="editLocation" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="flex justify-center gap-4">
+                <!-- Simplified cancel button to just go back in history -->
+                <button onclick="window.history.back()" class="px-8 py-3 rounded-full font-semibold transition" style="background-color: var(--light-bg); color: var(--primary-color);">Cancel</button>
+                <button onclick="saveProfile()" class="px-8 py-3 rounded-full text-white font-semibold transition hover:opacity-90" style="background-color: var(--primary-color);">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keep the script tag here, as it's needed for saveProfile() -->
+    <script src="{% static 'accounts/js/musician_profile.js' %}"></script>
+</body>
+</html>

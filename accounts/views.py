@@ -90,6 +90,10 @@ def logout_view(request):
 def get_profile(request):
     return render(request, 'accounts/musician_profile.html')
 
+#   ============================
+#        API CALL
+#   ============================
+
 # @api_view(['PUT'])
 # @permission_classes([IsAuthenticated])
 # def edit_profile(request):
@@ -104,8 +108,29 @@ def get_profile(request):
 #         })
 #     else:
 #         return Response(serializer.errors, status=400)
-        
+
+
+def musician_profile_view(request):
+    return render(request, 'accounts/musician_profile.html')
+
+
 # @csrf_protect
 # @permission_classes([IsAuthenticated])
-def edit_profile(request):
-    return render(request, 'accounts/musician_profile.html')
+def edit_profile_view(request):
+    return render(request, 'accounts/edit_musician_profile.html')
+
+
+    # user = request.user
+    # if request.method == 'POST':
+    #     location = request.POST.get('location')
+    #     genres = request.POST.get('genres')
+    #     instruments = request.POST.get('instruments')
+
+    #     # Update user profile fields
+    #     user.location = location
+    #     user.genres = genres
+    #     user.instruments = instruments
+    #     user.save()
+
+    #     messages.success(request, 'Profile updated successfully!')
+    #     return redirect('edit_profile')
