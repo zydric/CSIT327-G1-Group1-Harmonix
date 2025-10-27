@@ -110,27 +110,35 @@ def get_profile(request):
 #         return Response(serializer.errors, status=400)
 
 
+@csrf_protect
 def musician_profile_view(request):
-    return render(request, 'accounts/musician_profile.html')
+    context = {
+        'user': request.user
+    }
+    return render(request, 'accounts/musician_profile.html', context)
 
 
-# @csrf_protect
-# @permission_classes([IsAuthenticated])
+@csrf_protect
 def edit_profile_view(request):
-    return render(request, 'accounts/edit_musician_profile.html')
+    user = request.user
+    
+    if request.method == 'POST':
+        user.username = request.POST.get('fullname', user.username)
+        user.email = request.POST.get('email', user.email)
+        user.role = request.POST.get('role', user.role)
+        user.location = request.POST.get('location', user.location)
+        user.genres = request.POST.get('genres', user.genres)
+        user.instruments = request.POST.get('instruments', user.instruments)
 
-
-    # user = request.user
-    # if request.method == 'POST':
-    #     location = request.POST.get('location')
-    #     genres = request.POST.get('genres')
-    #     instruments = request.POST.get('instruments')
-
-    #     # Update user profile fields
-    #     user.location = location
-    #     user.genres = genres
-    #     user.instruments = instruments
-    #     user.save()
-
-    #     messages.success(request, 'Profile updated successfully!')
-    #     return redirect('edit_profile')
+        try:
+            user.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('musician_profile') # 'musician_profile' / musician_profile_view
+        except Exception as e:
+            messages.error(request, f'An error occurred: {e}')
+            
+    # For a GET request, just show the page with the user's current data
+    context = {
+        'user': user
+    }
+    return render(request, 'accounts/edit_musician_profile.html', context)
