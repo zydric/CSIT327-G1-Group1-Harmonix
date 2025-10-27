@@ -23,18 +23,11 @@
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4">
     <div id="app" class="max-w-2xl mx-auto">
 
-        <!-- 
-          Key Change 1: The 'div' is now a 'form' tag.
-          - method="POST" tells the browser to send data.
-          - action="..." tells the form where to send the data.
-        -->
         <form id="editMode" method="POST" action="{% url 'edit_profile' %}">
             
-            <!-- Key Change 2: The CSRF token is required for security and MUST be inside the form -->
             {% csrf_token %}
             
             <div class="mb-8 flex items-center relative">
-                <!-- This 'Cancel' button is just a link, so it's fine -->
                 <a href="{% url 'musician_profile' %}" class="text-gray-600 hover:text-gray-900 transition absolute left-0 top-1/2 -translate-y-1/2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -60,7 +53,17 @@
                                 </svg>
                             </button>
                         </div>
-                        <!-- This section was commented out, which is good. -->
+                        <!-- Redundant Attributes -->
+
+                        <!-- <div class="flex flex-col gap-2">
+
+                            <input type="text" id="editNameHeader" placeholder="{{ user.username }}" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+
+                            <input type="text" id="editRoleHeader" placeholder="{{ user.role }}" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+
+                            <input type="text" id="editLocationHeader" placeholder="{{ user.location }}" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+
+                        </div> -->
                     </div>
                     <button type="button" class="font-semibold transition hover:opacity-80" style="color: var(--primary-color);">Upload New</button>
                 </div>
@@ -73,17 +76,14 @@
                         <div class="space-y-6">
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Username</label>
-                                <!-- Key Change 3: Added name="fullname" to match views.py -->
                                 <input type="text" id="editFullName" name="fullname" value="{{ user.username }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
                             </div>
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Email Address</label>
-                                <!-- Key Change 3: Added name="email" -->
                                 <input type="email" id="editEmail" name="email" value="{{ user.email }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
                             </div>
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Role</label>
-                                <!-- Key Change 3: Added name="role" -->
                                 <input type="text" id="editRole" name="role" value="{{ user.role|default_if_none:'' }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
                             </div>
                         </div>
@@ -92,17 +92,14 @@
                         <div class="space-y-6">
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Instrument/s</label>
-                                <!-- Key Change 3: Added name="instruments" -->
                                 <input type="text" id="editInstruments" name="instruments" value="{{ user.instruments|default_if_none:'' }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
                             </div>
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Genre/s</label>
-                                <!-- Key Change 3: Added name="genres" -->
                                 <input type="text" id="editGenres" name="genres" value="{{ user.genres|default_if_none:'' }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
                             </div>
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Location</label>
-                                <!-- Key Change 3: Added name="location" -->
                                 <input type="text" id="editLocation" name="location" value="{{ user.location|default_if_none:'' }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
                             </div>
                         </div>
