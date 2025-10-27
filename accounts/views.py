@@ -7,7 +7,6 @@ from django.views.decorators.csrf import csrf_protect
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import UserSerializer
 
 from .models import User
 
@@ -42,7 +41,6 @@ def register(request):
             return render(request, 'accounts/register.html')
 
         try:
-            # Create user using the custom UserManager
             user = User.objects.create_user(
                 username=username,
                 email=email,
@@ -90,25 +88,6 @@ def logout_view(request):
 def get_profile(request):
     return render(request, 'accounts/musician_profile.html')
 
-#   ============================
-#        API CALL
-#   ============================
-
-# @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
-# def edit_profile(request):
-#     user = request.user
-#     serializer = UserSerializer(user, data=request.data, partial=True)  # partial=True = only update fields provided
-
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response({
-#             'message': 'Profile updated successfully!',
-#             'user': serializer.data
-#         })
-#     else:
-#         return Response(serializer.errors, status=400)
-
 
 @csrf_protect
 def musician_profile_view(request):
@@ -124,8 +103,6 @@ def edit_profile_view(request):
     
     if request.method == 'POST':
         user.username = request.POST.get('fullname', user.username)
-        user.email = request.POST.get('email', user.email)
-        user.role = request.POST.get('role', user.role)
         user.location = request.POST.get('location', user.location)
         user.genres = request.POST.get('genres', user.genres)
         user.instruments = request.POST.get('instruments', user.instruments)
@@ -133,12 +110,12 @@ def edit_profile_view(request):
         try:
             user.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('musician_profile') # 'musician_profile' / musician_profile_view
+            return redirect('musician_profile') 
         except Exception as e:
             messages.error(request, f'An error occurred: {e}')
             
-    # For a GET request, just show the page with the user's current data
     context = {
         'user': user
     }
     return render(request, 'accounts/edit_musician_profile.html', context)
+
