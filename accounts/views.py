@@ -90,18 +90,22 @@ def logout_view(request):
 def get_profile(request):
     return render(request, 'accounts/musician_profile.html')
 
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def edit_profile(request):
-    user = request.user
-    serializer = UserSerializer(user, data=request.data, partial=True)  # partial=True = only update fields provided
+# @api_view(['PUT'])
+# @permission_classes([IsAuthenticated])
+# def edit_profile(request):
+#     user = request.user
+#     serializer = UserSerializer(user, data=request.data, partial=True)  # partial=True = only update fields provided
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response({
-            'message': 'Profile updated successfully!',
-            'user': serializer.data
-        })
-    else:
-        return Response(serializer.errors, status=400)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response({
+#             'message': 'Profile updated successfully!',
+#             'user': serializer.data
+#         })
+#     else:
+#         return Response(serializer.errors, status=400)
         
+# @csrf_protect
+# @permission_classes([IsAuthenticated])
+def edit_profile(request):
+    return render(request, 'accounts/musician_profile.html')
