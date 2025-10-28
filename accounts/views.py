@@ -7,7 +7,6 @@ from django.views.decorators.csrf import csrf_protect
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from .models import User
 
 @csrf_protect
@@ -63,14 +62,12 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Authenticate user
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             auth_login(request, user)
             messages.success(request, f'Welcome back, {user.username}!')
 
-            # Redirects to root home
             next_page = request.GET.get('next', 'home_view')
             return redirect(next_page)
         else:
