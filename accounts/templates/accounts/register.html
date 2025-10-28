@@ -2,12 +2,13 @@
 
 {% block content %}
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative">
+
     <a href="/" class="absolute font-semibold bg-slate-100 top-10 right-30 text-[#4F2FC0] flex items-center justify-center text-lg p-2 w-10 h-10 rounded-full">
         <span class="text-center">X</span>
     </a>
+
     <div class="max-w-md w-full space-y-8">
         
-        <!-- Messages Display (ONLY ONE) -->
         {% if messages %}
         <div class="space-y-3">
             {% for message in messages %}
@@ -32,6 +33,7 @@
         <form class="mt-8 space-y-6" method="POST" action="{% url 'register' %}">
             {% csrf_token %}
             <div class="rounded-md space-y-3">
+                
                 <div>
                     <label for="role" class="block font-medium text-gray-700">Register as</label>
                     <select id="role" name="role" required

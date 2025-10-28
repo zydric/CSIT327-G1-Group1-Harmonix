@@ -20,6 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4">
     <div id="app" class="max-w-2xl mx-auto">
 
@@ -53,18 +54,8 @@
                                 </svg>
                             </button>
                         </div>
-                        <!-- Redundant Attributes -->
-
-                        <!-- <div class="flex flex-col gap-2">
-
-                            <input type="text" id="editNameHeader" placeholder="{{ user.username }}" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
-
-                            <input type="text" id="editRoleHeader" placeholder="{{ user.role }}" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
-
-                            <input type="text" id="editLocationHeader" placeholder="{{ user.location }}" class="px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
-
-                        </div> -->
-                    </div>
+                        
+                        </div>
                     <button type="button" class="font-semibold transition hover:opacity-80" style="color: var(--primary-color);">Upload New</button>
                 </div>
 
@@ -76,16 +67,14 @@
                         <div class="space-y-6">
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Username</label>
-                                <input type="text" id="editFullName" name="fullname" value="{{ user.username }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                                <input type="text" id="editFullName" name="username" value="{{ user.username }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
                             </div>
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Email Address</label>
-                                <!-- Email is now readonly, styled as disabled, and has no 'name' attribute -->
                                 <input type="email" id="editEmail" value="{{ user.email }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 bg-gray-100 cursor-not-allowed" style="--tw-ring-color: var(--primary-color);" readonly>
                             </div>
                             <div>
                                 <label class="text-gray-600 text-sm mb-2 block">Role</label>
-                                <!-- Role is now readonly, styled as disabled, and has no 'name' attribute -->
                                 <input type="text" id="editRole" value="{{ user.role|default_if_none:'' }}" class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 bg-gray-100 cursor-not-allowed" style="--tw-ring-color: var(--primary-color);" readonly>
                             </div>
                         </div>
@@ -110,15 +99,11 @@
             </div>
 
             <div class="flex justify-center gap-4">
-                
                 <a href="{% url 'musician_profile' %}" class="px-8 py-3 rounded-full font-semibold transition text-center" style="background-color: var(--light-bg); color: var(--primary-color);">Cancel</a>
-
                 <button type="submit" class="px-8 py-3 rounded-full text-white font-semibold transition hover:opacity-90" style="background-color: var(--primary-color);">Save</button>
-                
             </div>
+
         </form> 
     </div>
-
 </body>
 </html>
-

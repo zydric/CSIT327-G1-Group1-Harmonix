@@ -18,10 +18,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4">
     <div id="app" class="max-w-2xl mx-auto">
         <div id="viewMode">
-            <div class="mb-8 flex items-center relative">                 
+            
+            <div class="mb-8 flex items-center relative">
                 <a href="/home/" class="text-gray-600 hover:text-gray-900 transition absolute left-0 top-1/2 -translate-y-1/2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -31,12 +33,13 @@
             </div>
 
             <div class="bg-white rounded-2xl shadow-sm p-8 mb-8">
+                
                 <div class="flex items-start justify-between mb-8">
                     <div class="flex items-center gap-4">
                         <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
                             <span class="text-gray-500 text-2xl">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 20 20" fill="currentColor">
-                                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                                 </svg>
                             </span>
                         </div>
@@ -88,7 +91,7 @@
 
             
             <div class="flex justify-center gap-4">
-                 <a href="{% url 'edit_profile' %}" class="px-8 py-3 rounded-full font-semibold transition" style="background-color: var(--light-bg); color: var(--primary-color);">
+                <a href="{% url 'edit_profile' %}" class="px-8 py-3 rounded-full font-semibold transition" style="background-color: var(--light-bg); color: var(--primary-color);">
                     Edit Profile
                 </a>
                 <a href="{% url 'logout' %}" class="px-8 py-3 rounded-full text-white font-semibold transition hover:opacity-90 flex items-center gap-2" style="background-color: var(--primary-color);">
