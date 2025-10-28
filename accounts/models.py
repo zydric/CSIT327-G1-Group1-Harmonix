@@ -38,14 +38,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='musician')
     date_joined = models.DateTimeField(default=timezone.now)
-    #EditProfile Attributes - Start
     role = models.CharField(max_length=50)
     location = models.CharField(max_length=100, blank=True, null=True)
     genres = models.CharField(max_length=200, blank=True, null=True)
     instruments = models.CharField(max_length=200, blank=True, null=True)
-    #EditProfile Attributes - End
-    created_at = models.DateTimeField(auto_now_add=True)   # new timestamp
-    updated_at = models.DateTimeField(auto_now=True)       # new timestamp
+    created_at = models.DateTimeField(auto_now_add=True)   
+    updated_at = models.DateTimeField(auto_now=True)       
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 

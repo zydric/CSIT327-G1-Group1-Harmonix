@@ -3,6 +3,7 @@ from django.contrib.auth import login as auth_login, authenticate, logout
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
 #REST FRAMEWORKS
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -18,7 +19,6 @@ def register(request):
         password2 = request.POST.get('password2')
         role = request.POST.get('role')
 
-        # Validation
         if password1 != password2:
             messages.error(request, 'Passwords do not match!')
             return render(request, 'accounts/register.html')
@@ -81,11 +81,7 @@ def logout_view(request):
     messages.success(request, 'You have been logged out successfully.')
     return redirect('login')
 
-
-def get_profile(request):
-    return render(request, 'accounts/musician_profile.html')
-
-
+@login_required
 @csrf_protect
 def musician_profile_view(request):
     context = {
@@ -93,7 +89,7 @@ def musician_profile_view(request):
     }
     return render(request, 'accounts/musician_profile.html', context)
 
-
+@login_required
 @csrf_protect
 def edit_profile_view(request):
     user = request.user
