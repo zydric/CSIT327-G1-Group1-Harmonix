@@ -7,13 +7,7 @@ from django.utils import timezone
 # Custom User Manager
 # ============================
 class UserManager(BaseUserManager):
-    """
-    Custom manager for the User model.
-    """
     def create_user(self, username, email, password=None, role='musician'):
-        """
-        Creates and saves a regular user.
-        """
         if not email:
             raise ValueError("Users must have an email address")
         
@@ -24,9 +18,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, email, password=None):
-        """
-        Creates and saves a superuser.
-        """
         # Note: Superuser role is set to 'admin' by default here
         user = self.create_user(username, email, password, role='admin')
         user.is_staff = True
@@ -39,9 +30,6 @@ class UserManager(BaseUserManager):
 # Custom User Model
 # ============================
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-    Custom user model replacing the default Django User.
-    """
     ROLE_CHOICES = [
         ('musician', 'Musician'),
         ('band', 'Band Admin'),
@@ -81,7 +69,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def is_musician(self):
-        """Returns True if the user is a musician."""
         return self.role == 'musician'
 
     @property
@@ -94,10 +81,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 # Musician Profile Model
 # ============================
 class Musician(models.Model):
-    """
-    Stores additional information specific to Musician users.
-    Links one-to-one with the User model.
-    """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='musician_profile')
     bio = models.TextField(blank=True)
     
@@ -118,9 +101,6 @@ class Musician(models.Model):
 # Band Model
 # ============================
 class Band(models.Model):
-    """
-    Represents a band, which can contain multiple Musician members.
-    """
     band_name = models.CharField(max_length=255)
     members = models.ManyToManyField(Musician, related_name='bands')
     genre = models.CharField(max_length=255, blank=True)

@@ -17,10 +17,6 @@ from .models import User
 # ============================
 @csrf_protect
 def register(request):
-    """
-    Handles user registration.
-    Validates input and creates a new user.
-    """
     if request.method == 'POST':
         # --- Get form data ---
         username = request.POST.get('username')
@@ -74,10 +70,6 @@ def register(request):
 # ============================
 @csrf_protect
 def login_view(request):
-    """
-    Handles user login.
-    Authenticates and logs in the user.
-    """
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -106,9 +98,6 @@ def login_view(request):
 # ============================
 @never_cache  # Prevents caching of the logout page
 def logout_view(request):
-    """
-    Logs the user out and redirects to the login page.
-    """
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
     return redirect('login')
@@ -120,9 +109,6 @@ def logout_view(request):
 @login_required
 @csrf_protect
 def musician_profile_view(request):
-    """
-    Displays the logged-in user's profile.
-    """
     context = {
         'user': request.user
     }
@@ -135,9 +121,6 @@ def musician_profile_view(request):
 @login_required
 @csrf_protect
 def edit_profile_view(request):
-    """
-    Handles viewing and editing the user's profile information.
-    """
     user = request.user
     
     if request.method == 'POST':
