@@ -32,6 +32,12 @@ from django.core.exceptions import ImproperlyConfigured
 # Environment marker (development|production)
 ENV = os.getenv('ENV', 'development')
 
+# Debug: Print environment info (remove in production)
+if ENV == 'development':
+    print(f"Environment: {ENV}")
+    print(f"DEBUG: {os.getenv('DEBUG', 'Not Set')}")
+    print(f"ALLOWED_HOSTS env: {os.getenv('ALLOWED_HOSTS', 'Not Set')}")
+
 def env_bool(name, default=False):
     val = os.getenv(name)
     if val is None:
@@ -55,13 +61,26 @@ if not SECRET_KEY:
 # Hosts allowed to serve the app (comma-separated in env)
 ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', 'localhost,127.0.0.1')
 
+# CSRF Trusted Origins - must include protocol (https://) for production
+CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS', 'http://localhost:8000,http://127.0.0.1:8000')
+
 # Auto-add common deployment domains if not explicitly set
-if ENV == 'production' and not os.getenv('ALLOWED_HOSTS'):
-    # Add common patterns for Render, Heroku, etc.
-    ALLOWED_HOSTS.extend([
-        '.onrender.com',  # Render domains
-        '.herokuapp.com',  # Heroku domains (if you switch platforms)
-    ])
+if ENV == 'production':
+    if not os.getenv('ALLOWED_HOSTS'):
+        # Temporary: Allow all hosts (CHANGE THIS TO YOUR ACTUAL DOMAIN)
+        ALLOWED_HOSTS = ['*']
+        # TODO: Replace '*' with your actual Render domain, e.g., ['your-app.onrender.com']
+    
+    # Auto-add CSRF trusted origins for production if not explicitly set
+    if not os.getenv('CSRF_TRUSTED_ORIGINS'):
+        # Add your production domains with HTTPS protocol
+        CSRF_TRUSTED_ORIGINS = [
+            'https://*.onrender.com',  # Render domains (wildcard for testing)
+        ]
+else:
+    # Development fallback - allow all hosts for local testing
+    if not ALLOWED_HOSTS or ALLOWED_HOSTS == ['']:
+        ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
 
 # Application definition
@@ -133,7 +152,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3'),
         conn_max_age=600,
-        ssl_require=True,
+        ssl_require=ENV == 'production',  # Only require SSL in production
     )
 }
 
