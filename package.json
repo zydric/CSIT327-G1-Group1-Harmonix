@@ -1,0 +1,27 @@
+{
+  "name": "csit327-g1-harmonix",
+  "version": "1.0.0",
+  "description": "A web platform designed to connect musicians and bands with opportunities, enabling collaboration, networking, and community building.",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./assets/css/input.css -o ./static/css/tailwind.css --minify",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zydric/CSIT327-G1-Harmonix.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zydric/CSIT327-G1-Harmonix/issues"
+  },
+  "homepage": "https://github.com/zydric/CSIT327-G1-Harmonix#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^10.1.0",
+    "tailwindcss": "^3.4.6"
+  }
+}
