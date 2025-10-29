@@ -1,8 +1,10 @@
 asgiref==3.9.2
 dj-database-url==3.0.1
-Django==5.2.6
+Django==4.2.25
 psycopg2-binary==2.9.10
 python-dotenv==1.1.1
 sqlparse==0.5.3
 tzdata==2025.2
 djangorestframework==3.16.1
+gunicorn==23.0.0
+whitenoise==6.11.0

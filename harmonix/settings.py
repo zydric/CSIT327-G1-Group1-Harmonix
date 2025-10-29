@@ -26,12 +26,42 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*!0tmwnj*4y-$(t8s4rq%xm74k!5&hvtru1rvnb*ye@k2x)hv!'
+# Load environment-driven configuration with safe development fallbacks
+from django.core.exceptions import ImproperlyConfigured
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Environment marker (development|production)
+ENV = os.getenv('ENV', 'development')
 
-ALLOWED_HOSTS = []
+def env_bool(name, default=False):
+    val = os.getenv(name)
+    if val is None:
+        return default
+    return str(val).lower() in ("1", "true", "yes")
+
+def env_list(name, default=""):
+    return [p.strip() for p in os.getenv(name, default).split(",") if p.strip()]
+
+# DEBUG defaults to True for local development, False for production
+DEBUG = env_bool('DEBUG', default=(ENV != 'production'))
+
+# SECRET_KEY must be set in production; use a local fallback for dev only
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    if ENV == 'production' or not DEBUG:
+        raise ImproperlyConfigured('SECRET_KEY is required in production')
+    # Local development fallback (keep in-memory only)
+    SECRET_KEY = 'django-insecure-local-dev-key'
+
+# Hosts allowed to serve the app (comma-separated in env)
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+
+# Auto-add common deployment domains if not explicitly set
+if ENV == 'production' and not os.getenv('ALLOWED_HOSTS'):
+    # Add common patterns for Render, Heroku, etc.
+    ALLOWED_HOSTS.extend([
+        '.onrender.com',  # Render domains
+        '.herokuapp.com',  # Heroku domains (if you switch platforms)
+    ])
 
 
 # Application definition
@@ -49,12 +79,21 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'accounts.User'
 
-CSRF_COOKIE_SECURE = False
-SESSION_COOKIE_SECURE = False
+# Security cookie settings — toggle for production
+if ENV == 'production' or not DEBUG:
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+else:
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # WhiteNoise should come directly after SecurityMiddleware when used
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware', #used in forms
@@ -150,5 +189,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Use WhiteNoise storage for serving static files in production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOGIN_URL = 'login'
