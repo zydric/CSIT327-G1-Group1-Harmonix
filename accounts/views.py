@@ -126,7 +126,7 @@ def edit_profile_view(request):
     if request.method == 'POST':
         # --- Update user fields from form data ---
         # Use .get(field, default_value) to keep old value if field is not in POST
-        user.username = request.POST.get('fullname', user.username)
+        user.username = request.POST.get('username', user.username)
         user.location = request.POST.get('location', user.location)
         user.genres = request.POST.get('genres', user.genres)
         user.instruments = request.POST.get('instruments', user.instruments)
