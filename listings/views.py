@@ -19,7 +19,6 @@ def listings_view(request):
     search_query = request.GET.get('search', '')
     genre_filter = request.GET.get('genre', '')
     instrument_filter = request.GET.get('instrument', '')
-    location_filter = request.GET.get('location', '')
     
     if user.is_musician:
         # Musicians see all active listings
@@ -39,9 +38,6 @@ def listings_view(request):
         if instrument_filter:
             listings = listings.filter(instruments_needed__icontains=instrument_filter)
             
-        if location_filter:
-            listings = listings.filter(location__icontains=location_filter)
-            
         # Order by newest first
         listings = listings.order_by('-created_at')
         
@@ -55,18 +51,15 @@ def listings_view(request):
         # Get actual genres and instruments from listings
         used_genres = set()
         used_instruments = set()
-        locations = set()
         
         for listing in all_listings:
             used_genres.update(listing.genres_list)
             used_instruments.update(listing.instruments_list)
-            locations.add(listing.location)
         
         # Filter to only show genres/instruments that are actually used and in our choices
         filter_options = {
             'genres': [g for g in available_genres if g in used_genres],
             'instruments': [i for i in available_instruments if i in used_instruments],
-            'locations': sorted([loc for loc in locations if loc])  # Remove empty locations
         }
         
     else:  # Band admin
@@ -85,7 +78,6 @@ def listings_view(request):
             'search': search_query,
             'genre': genre_filter,
             'instrument': instrument_filter,
-            'location': location_filter,
         }
     }
     
