@@ -141,7 +141,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'harmonix.wsgi.application'
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'listings'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Database

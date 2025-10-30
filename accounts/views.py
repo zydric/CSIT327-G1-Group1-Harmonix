@@ -82,8 +82,8 @@ def login_view(request):
             auth_login(request, user)
             messages.success(request, f'Welcome back, {user.username}!')
             
-            # Redirect to 'next' page or default to 'home_view'
-            next_page = request.GET.get('next', 'home_view')
+            # Redirect to 'next' page or default to 'listings'
+            next_page = request.GET.get('next', 'listings')
             return redirect(next_page)
         else:
             # Login failed
