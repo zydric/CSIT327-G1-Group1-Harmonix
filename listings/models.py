@@ -1,33 +1,13 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from harmonix.constants import GENRE_CHOICES, INSTRUMENT_CHOICES
 
 
 class Listing(models.Model):
-    # Genre choices - standardized as per design requirements
-    GENRE_CHOICES = [
-        ('Rock', 'Rock'),
-        ('Jazz', 'Jazz'),
-        ('Indie', 'Indie'),
-        ('Folk', 'Folk'),
-        ('Electronic', 'Electronic'),
-        ('Blues', 'Blues'),
-        ('Country', 'Country'),
-    ]
-    
-    # Common instrument choices
-    INSTRUMENT_CHOICES = [
-        ('Guitar', 'Guitar'),
-        ('Bass', 'Bass'),
-        ('Drums', 'Drums'),
-        ('Vocals', 'Vocals'),
-        ('Piano', 'Piano'),
-        ('Keyboard', 'Keyboard'),
-        ('Saxophone', 'Saxophone'),
-        ('Trumpet', 'Trumpet'),
-        ('Violin', 'Violin'),
-        ('Percussion', 'Percussion'),
-    ]
+    # Use shared choices from constants
+    GENRE_CHOICES = GENRE_CHOICES
+    INSTRUMENT_CHOICES = INSTRUMENT_CHOICES
     # Basic Info
     title = models.CharField(max_length=200, help_text="e.g., 'Lead Guitarist Needed'")
     band_name = models.CharField(max_length=100, help_text="Name of the band posting this opportunity")

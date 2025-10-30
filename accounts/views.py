@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
+from harmonix.constants import GENRE_CHOICES, INSTRUMENT_CHOICES
 
 # REST FRAMEWORKS (Imports are not used in these views)
 # from rest_framework.decorators import api_view, permission_classes
@@ -24,45 +25,114 @@ def register(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
         role = request.POST.get('role')
+        
+        # Get multi-select values
+        selected_instruments = request.POST.getlist('instruments')  # getlist for multiple values
+        selected_genres = request.POST.getlist('genres')  # getlist for multiple values
 
         # --- Validation ---
         if password1 != password2:
             messages.error(request, 'Passwords do not match!')
-            return render(request, 'accounts/register.html')
+            return render(request, 'accounts/register.html', {
+                'genre_choices': GENRE_CHOICES,
+                'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
+            })
 
         if len(password1) < 8:
             messages.error(request, 'Password must be at least 8 characters long!')
-            return render(request, 'accounts/register.html')
+            return render(request, 'accounts/register.html', {
+                'genre_choices': GENRE_CHOICES,
+                'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
+            })
 
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists!')
-            return render(request, 'accounts/register.html')
+            return render(request, 'accounts/register.html', {
+                'genre_choices': GENRE_CHOICES,
+                'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
+            })
 
         if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already registered!')
-            return render(request, 'accounts/register.html')
+            messages.error(request, 'Email already exists!')
+            return render(request, 'accounts/register.html', {
+                'genre_choices': GENRE_CHOICES,
+                'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
+            })
 
         if not role or role not in ['musician', 'band']:
             messages.error(request, 'Please select a valid role!')
-            return render(request, 'accounts/register.html')
+            return render(request, 'accounts/register.html', {
+                'genre_choices': GENRE_CHOICES,
+                'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
+            })
+
+        # Validate instruments and genres for musicians
+        if role == 'musician':
+            if not selected_instruments:
+                messages.error(request, 'Musicians must select at least one instrument!')
+                return render(request, 'accounts/register.html', {
+                    'genre_choices': GENRE_CHOICES,
+                    'instrument_choices': INSTRUMENT_CHOICES,
+                    'selected_instruments': selected_instruments,
+                    'selected_genres': selected_genres,
+                })
+            
+            if not selected_genres:
+                messages.error(request, 'Musicians must select at least one genre!')
+                return render(request, 'accounts/register.html', {
+                    'genre_choices': GENRE_CHOICES,
+                    'instrument_choices': INSTRUMENT_CHOICES,
+                    'selected_instruments': selected_instruments,
+                    'selected_genres': selected_genres,
+                })
 
         # --- Create user ---
         try:
+            # Convert lists to comma-separated strings
+            instruments_str = ', '.join(selected_instruments) if selected_instruments else ''
+            genres_str = ', '.join(selected_genres) if selected_genres else ''
+            
             user = User.objects.create_user(
                 username=username,
                 email=email,
                 password=password1,
                 role=role
             )
+            
+            # Set instruments and genres if provided
+            if instruments_str:
+                user.instruments = instruments_str
+            if genres_str:
+                user.genres = genres_str
+            user.save()
+            
             messages.success(request, 'Registration successful! Please login.')
             return redirect('login')
 
         except Exception as e:
             messages.error(request, f'Registration failed: {str(e)}')
-            return render(request, 'accounts/register.html')
+            return render(request, 'accounts/register.html', {
+                'genre_choices': GENRE_CHOICES,
+                'instrument_choices': INSTRUMENT_CHOICES,
+            })
 
     # Handle GET request
-    return render(request, 'accounts/register.html')
+    return render(request, 'accounts/register.html', {
+        'genre_choices': GENRE_CHOICES,
+        'instrument_choices': INSTRUMENT_CHOICES,
+        'selected_instruments': [],
+        'selected_genres': [],
+    })
 
 
 # ============================

@@ -37,11 +37,44 @@
                 <div>
                     <label for="role" class="block font-medium text-gray-700">Register as</label>
                     <select id="role" name="role" required
-                            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            onchange="toggleMusicianFields()">
                         <option value="" disabled selected>Choose user type</option>
                         <option value="musician" {% if request.POST.role == 'musician' %}selected{% endif %}>Musician</option>
                         <option value="band" {% if request.POST.role == 'band' %}selected{% endif %}>Band</option>
                     </select>
+                </div>
+
+                <!-- Instruments field (only for musicians) -->
+                <div id="instruments-field" class="hidden">
+                    <label for="instruments" class="block font-medium text-gray-700">Instruments <span class="text-red-500">*</span></label>
+                    <div class="mt-1 border border-gray-300 rounded-md p-2 max-h-32 overflow-y-auto">
+                        {% for value, label in instrument_choices %}
+                        <label class="flex items-center space-x-2 text-sm">
+                            <input type="checkbox" name="instruments" value="{{ value }}" 
+                                   class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                   {% if value in request.POST.instruments %}checked{% endif %}>
+                            <span>{{ label }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Select all instruments you can play</p>
+                </div>
+
+                <!-- Genres field (only for musicians) -->
+                <div id="genres-field" class="hidden">
+                    <label for="genres" class="block font-medium text-gray-700">Musical Genres <span class="text-red-500">*</span></label>
+                    <div class="mt-1 border border-gray-300 rounded-md p-2 max-h-32 overflow-y-auto">
+                        {% for value, label in genre_choices %}
+                        <label class="flex items-center space-x-2 text-sm">
+                            <input type="checkbox" name="genres" value="{{ value }}" 
+                                   class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                   {% if value in request.POST.genres %}checked{% endif %}>
+                            <span>{{ label }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Select your preferred musical genres</p>
                 </div>
 
                 <div>
@@ -91,4 +124,32 @@
         </form>
     </div>
 </div>
+
+<script>
+function toggleMusicianFields() {
+    const roleSelect = document.getElementById('role');
+    const instrumentsField = document.getElementById('instruments-field');
+    const genresField = document.getElementById('genres-field');
+    
+    if (roleSelect.value === 'musician') {
+        instrumentsField.classList.remove('hidden');
+        genresField.classList.remove('hidden');
+    } else {
+        instrumentsField.classList.add('hidden');
+        genresField.classList.add('hidden');
+        
+        // Clear selections when hiding
+        const instrumentCheckboxes = instrumentsField.querySelectorAll('input[type="checkbox"]');
+        const genreCheckboxes = genresField.querySelectorAll('input[type="checkbox"]');
+        
+        instrumentCheckboxes.forEach(cb => cb.checked = false);
+        genreCheckboxes.forEach(cb => cb.checked = false);
+    }
+}
+
+// Show fields on page load if musician is already selected
+document.addEventListener('DOMContentLoaded', function() {
+    toggleMusicianFields();
+});
+</script>
 {% endblock %}
