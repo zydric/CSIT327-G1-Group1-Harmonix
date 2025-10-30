@@ -63,7 +63,6 @@ class Command(BaseCommand):
                 'band_admin': band_user,
                 'instruments_needed': 'Guitar',
                 'genres': 'Rock',
-                'location': 'Los Angeles, CA',
             },
             {
                 'title': 'Jazz Bassist for Regular Venue',
@@ -72,7 +71,6 @@ class Command(BaseCommand):
                 'band_admin': jazz_band,
                 'instruments_needed': 'Bass',
                 'genres': 'Jazz',
-                'location': 'New York, NY',
             },
             {
                 'title': 'Indie Band Seeks Drummer',
@@ -81,7 +79,6 @@ class Command(BaseCommand):
                 'band_admin': indie_band,
                 'instruments_needed': 'Drums',
                 'genres': 'Indie',
-                'location': 'Portland, OR',
             },
             {
                 'title': 'Vocalist for Rock Band',
@@ -90,7 +87,6 @@ class Command(BaseCommand):
                 'band_admin': band_user,
                 'instruments_needed': 'Vocals',
                 'genres': 'Rock',
-                'location': 'Los Angeles, CA',
             },
             {
                 'title': 'Pianist for Jazz Ensemble',
@@ -99,7 +95,6 @@ class Command(BaseCommand):
                 'band_admin': jazz_band,
                 'instruments_needed': 'Piano',
                 'genres': 'Jazz',
-                'location': 'New York, NY',
             },
         ]
 

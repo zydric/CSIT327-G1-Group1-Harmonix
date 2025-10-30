@@ -51,7 +51,6 @@ class Listing(models.Model):
         max_length=200,
         help_text="Comma-separated list: 'Rock, Alternative, Jazz'"
     )
-    location = models.CharField(max_length=100, help_text="City, State or general area")
     
     # Status
     is_active = models.BooleanField(
