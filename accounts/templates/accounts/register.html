@@ -37,74 +37,119 @@
                 <div>
                     <label for="role" class="block font-medium text-gray-700">Register as</label>
                     <select id="role" name="role" required
-                            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="appearance-none rounded-md relative block w-full px-3 py-2 border {% if field_errors.role %}border-red-500 bg-red-50{% else %}border-gray-300{% endif %} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             onchange="toggleMusicianFields()">
-                        <option value="" disabled selected>Choose user type</option>
-                        <option value="musician" {% if request.POST.role == 'musician' %}selected{% endif %}>Musician</option>
-                        <option value="band" {% if request.POST.role == 'band' %}selected{% endif %}>Band</option>
+                        <option value="" disabled {% if not role %}selected{% endif %}>Choose user type</option>
+                        <option value="musician" {% if role == 'musician' %}selected{% endif %}>Musician</option>
+                        <option value="band" {% if role == 'band' %}selected{% endif %}>Band</option>
                     </select>
+                    {% if field_errors.role %}
+                    <p class="mt-1 text-sm text-red-600">{{ field_errors.role }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Instruments field (only for musicians) -->
                 <div id="instruments-field" class="hidden">
                     <label for="instruments" class="block font-medium text-gray-700">Instruments <span class="text-red-500">*</span></label>
-                    <div class="mt-1 border border-gray-300 rounded-md p-2 max-h-32 overflow-y-auto">
+                    <div class="mt-1 border {% if field_errors.instruments %}border-red-500 bg-red-50{% else %}border-gray-300{% endif %} rounded-md p-2 max-h-32 overflow-y-auto">
                         {% for value, label in instrument_choices %}
                         <label class="flex items-center space-x-2 text-sm">
                             <input type="checkbox" name="instruments" value="{{ value }}" 
                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                   {% if value in request.POST.instruments %}checked{% endif %}>
+                                   {% if value in selected_instruments %}checked{% endif %}>
                             <span>{{ label }}</span>
                         </label>
                         {% endfor %}
                     </div>
                     <p class="text-xs text-gray-500 mt-1">Select all instruments you can play</p>
+                    {% if field_errors.instruments %}
+                    <p class="mt-1 text-sm text-red-600">{{ field_errors.instruments }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Genres field (only for musicians) -->
                 <div id="genres-field" class="hidden">
                     <label for="genres" class="block font-medium text-gray-700">Musical Genres <span class="text-red-500">*</span></label>
-                    <div class="mt-1 border border-gray-300 rounded-md p-2 max-h-32 overflow-y-auto">
+                    <div class="mt-1 border {% if field_errors.genres %}border-red-500 bg-red-50{% else %}border-gray-300{% endif %} rounded-md p-2 max-h-32 overflow-y-auto">
                         {% for value, label in genre_choices %}
                         <label class="flex items-center space-x-2 text-sm">
                             <input type="checkbox" name="genres" value="{{ value }}" 
                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                   {% if value in request.POST.genres %}checked{% endif %}>
+                                   {% if value in selected_genres %}checked{% endif %}>
                             <span>{{ label }}</span>
                         </label>
                         {% endfor %}
                     </div>
                     <p class="text-xs text-gray-500 mt-1">Select your preferred musical genres</p>
+                    {% if field_errors.genres %}
+                    <p class="mt-1 text-sm text-red-600">{{ field_errors.genres }}</p>
+                    {% endif %}
                 </div>
 
                 <div>
                     <label for="username" class="block font-medium text-gray-700">Username</label>
                     <input id="username" name="username" type="text" required 
-                        class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                        class="appearance-none rounded-md relative block w-full px-3 py-2 border {% if field_errors.username %}border-red-500 bg-red-50{% else %}border-gray-300{% endif %} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
                         placeholder="Username"
-                        value="{{ request.POST.username }}">
+                        value="{{ username|default:'' }}">
+                    {% if field_errors.username %}
+                    <p class="mt-1 text-sm text-red-600">{{ field_errors.username }}</p>
+                    {% endif %}
                 </div>
 
                 <div>
                     <label for="email" class="block font-medium text-gray-700">Email</label>
                     <input id="email" name="email" type="email" required 
-                        class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                        class="appearance-none rounded-md relative block w-full px-3 py-2 border {% if field_errors.email %}border-red-500 bg-red-50{% else %}border-gray-300{% endif %} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
                         placeholder="Email"
-                        value="{{ request.POST.email }}">
+                        value="{{ email|default:'' }}">
+                    {% if field_errors.email %}
+                    <p class="mt-1 text-sm text-red-600">{{ field_errors.email }}</p>
+                    {% endif %}
                 </div>
 
                 <div>
                     <label for="password1" class="block font-medium text-gray-700">Password</label>
                     <input id="password1" name="password1" type="password" required 
-                        class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
-                        placeholder="Password">
+                        class="appearance-none rounded-md relative block w-full px-3 py-2 border {% if field_errors.password1 %}border-red-500 bg-red-50{% else %}border-gray-300{% endif %} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                        placeholder="Password"
+                        oninput="checkPasswordStrength()">
+                    {% if field_errors.password1 %}
+                    <p class="mt-1 text-sm text-red-600">{{ field_errors.password1 }}</p>
+                    {% endif %}
+                    
+                    <!-- Password Strength Indicator -->
+                    <div id="password-strength" class="mt-2 hidden">
+                        <div class="flex items-center space-x-2">
+                            <div class="flex-1">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="strength-bar" class="h-2 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            <span id="strength-text" class="text-sm font-medium"></span>
+                        </div>
+                        <div class="mt-1 text-xs text-gray-600">
+                            <ul id="password-requirements" class="list-disc list-inside space-y-1">
+                                <li id="req-length" class="text-gray-500">At least 8 characters</li>
+                                <li id="req-lower" class="text-gray-500">One lowercase letter</li>
+                                <li id="req-upper" class="text-gray-500">One uppercase letter</li>
+                                <li id="req-number" class="text-gray-500">One number</li>
+                                <li id="req-special" class="text-gray-500">One special character</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters with upper/lowercase letters, numbers, and special characters</p>
                 </div>
 
                 <div>
                     <label for="password2" class="block font-medium text-gray-700">Confirm Password</label>
                     <input id="password2" name="password2" type="password" required 
-                        class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                        class="appearance-none rounded-md relative block w-full px-3 py-2 border {% if field_errors.password2 %}border-red-500 bg-red-50{% else %}border-gray-300{% endif %} placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
                         placeholder="Confirm Password">
+                    {% if field_errors.password2 %}
+                    <p class="mt-1 text-sm text-red-600">{{ field_errors.password2 }}</p>
+                    {% endif %}
                 </div>
             </div>
 
@@ -138,18 +183,161 @@ function toggleMusicianFields() {
         instrumentsField.classList.add('hidden');
         genresField.classList.add('hidden');
         
-        // Clear selections when hiding
-        const instrumentCheckboxes = instrumentsField.querySelectorAll('input[type="checkbox"]');
-        const genreCheckboxes = genresField.querySelectorAll('input[type="checkbox"]');
-        
-        instrumentCheckboxes.forEach(cb => cb.checked = false);
-        genreCheckboxes.forEach(cb => cb.checked = false);
+        // Only clear selections when user actively changes from musician to band
+        // Don't clear on page load with errors
+        if (roleSelect.value === 'band') {
+            const instrumentCheckboxes = instrumentsField.querySelectorAll('input[type="checkbox"]');
+            const genreCheckboxes = genresField.querySelectorAll('input[type="checkbox"]');
+            
+            instrumentCheckboxes.forEach(cb => cb.checked = false);
+            genreCheckboxes.forEach(cb => cb.checked = false);
+        }
     }
 }
 
-// Show fields on page load if musician is already selected
+function checkPasswordStrength() {
+    const password = document.getElementById('password1').value;
+    const strengthIndicator = document.getElementById('password-strength');
+    const strengthBar = document.getElementById('strength-bar');
+    const strengthText = document.getElementById('strength-text');
+    
+    if (password.length === 0) {
+        strengthIndicator.classList.add('hidden');
+        return;
+    }
+    
+    strengthIndicator.classList.remove('hidden');
+    
+    let score = 0;
+    let feedback = [];
+    
+    // Check requirements
+    const requirements = {
+        'req-length': password.length >= 8,
+        'req-lower': /[a-z]/.test(password),
+        'req-upper': /[A-Z]/.test(password),
+        'req-number': /[0-9]/.test(password),
+        'req-special': /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+    
+    // Update requirement indicators
+    Object.entries(requirements).forEach(([id, met]) => {
+        const element = document.getElementById(id);
+        if (met) {
+            element.classList.remove('text-gray-500');
+            element.classList.add('text-green-600');
+            score++;
+        } else {
+            element.classList.remove('text-green-600');
+            element.classList.add('text-gray-500');
+        }
+    });
+    
+    // Calculate strength and update display
+    let strength, color, width;
+    if (score <= 1) {
+        strength = 'Very Weak';
+        color = '#dc2626';
+        width = '20%';
+    } else if (score === 2) {
+        strength = 'Weak';
+        color = '#ea580c';
+        width = '40%';
+    } else if (score === 3) {
+        strength = 'Fair';
+        color = '#d97706';
+        width = '60%';
+    } else if (score === 4) {
+        strength = 'Good';
+        color = '#16a34a';
+        width = '80%';
+    } else {
+        strength = 'Strong';
+        color = '#059669';
+        width = '100%';
+    }
+    
+    strengthBar.style.backgroundColor = color;
+    strengthBar.style.width = width;
+    strengthText.textContent = strength;
+    strengthText.style.color = color;
+}
+
+// Show fields on page load based on current role value
 document.addEventListener('DOMContentLoaded', function() {
-    toggleMusicianFields();
+    const roleSelect = document.getElementById('role');
+    
+    // If there's a role selected (from validation errors or user selection)
+    if (roleSelect.value) {
+        toggleMusicianFields();
+    }
+    
+    // Scroll to first error field if there are validation errors
+    {% if field_errors %}
+    const firstErrorField = document.querySelector('.border-red-500');
+    if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstErrorField.focus();
+    }
+    {% endif %}
+});
+
+// Add real-time validation feedback
+document.addEventListener('DOMContentLoaded', function() {
+    const usernameField = document.getElementById('username');
+    const emailField = document.getElementById('email');
+    const password1Field = document.getElementById('password1');
+    const password2Field = document.getElementById('password2');
+    
+    // Username validation
+    usernameField.addEventListener('input', function() {
+        const value = this.value.trim();
+        const isValid = value.length >= 3 && /^[a-zA-Z0-9_]+$/.test(value);
+        updateFieldValidation(this, isValid);
+    });
+    
+    // Email validation
+    emailField.addEventListener('input', function() {
+        const value = this.value.trim();
+        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        updateFieldValidation(this, isValid);
+    });
+    
+    // Password validation
+    password1Field.addEventListener('input', function() {
+        const value = this.value;
+        const isValid = value.length >= 8 && /[a-z]/.test(value) && /[A-Z]/.test(value) && /[0-9]/.test(value) && /[!@#$%^&*(),.?":{}|<>]/.test(value);
+        updateFieldValidation(this, isValid);
+        
+        // Also check password confirmation if it has a value
+        if (password2Field.value) {
+            const passwordsMatch = value === password2Field.value;
+            updateFieldValidation(password2Field, passwordsMatch);
+        }
+    });
+    
+    // Password confirmation validation
+    password2Field.addEventListener('input', function() {
+        const passwordsMatch = this.value === password1Field.value;
+        updateFieldValidation(this, passwordsMatch);
+    });
+    
+    function updateFieldValidation(field, isValid) {
+        if (field.value.trim() === '') {
+            // Don't show validation for empty fields
+            field.classList.remove('border-red-500', 'bg-red-50', 'border-green-500', 'bg-green-50');
+            field.classList.add('border-gray-300');
+            return;
+        }
+        
+        if (isValid) {
+            field.classList.remove('border-red-500', 'bg-red-50', 'border-gray-300');
+            field.classList.add('border-green-500', 'bg-green-50');
+        } else {
+            field.classList.remove('border-green-500', 'bg-green-50', 'border-gray-300');
+            field.classList.add('border-red-500', 'bg-red-50');
+        }
+    }
 });
 </script>
 {% endblock %}
