@@ -94,6 +94,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'accounts',
+    'listings',
+    'applications',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -141,7 +143,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'harmonix.wsgi.application'
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'listings'
+LOGIN_REDIRECT_URL = 'listings:feed'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Database

@@ -22,7 +22,8 @@ from . import views
 urlpatterns = [
     path('', views.landing_page, name='landing'),
     path('home/', views.home_view, name='home_view'),  # Protected home
-    path('listings/', views.listings_view, name='listings'),  # New listings page
+    path('listings/', include('listings.urls')),  # Include listings app URLs
+    path('applications/', include('applications.urls')),  # Include applications app URLs
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
 ]
