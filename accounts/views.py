@@ -36,6 +36,8 @@ def register(request):
             return render(request, 'accounts/register.html', {
                 'genre_choices': GENRE_CHOICES,
                 'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
             })
 
         if len(password1) < 8:
@@ -43,6 +45,8 @@ def register(request):
             return render(request, 'accounts/register.html', {
                 'genre_choices': GENRE_CHOICES,
                 'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
             })
 
         if User.objects.filter(username=username).exists():
@@ -50,13 +54,17 @@ def register(request):
             return render(request, 'accounts/register.html', {
                 'genre_choices': GENRE_CHOICES,
                 'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
             })
 
         if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already registered!')
+            messages.error(request, 'Email already exists!')
             return render(request, 'accounts/register.html', {
                 'genre_choices': GENRE_CHOICES,
                 'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
             })
 
         if not role or role not in ['musician', 'band']:
@@ -64,6 +72,8 @@ def register(request):
             return render(request, 'accounts/register.html', {
                 'genre_choices': GENRE_CHOICES,
                 'instrument_choices': INSTRUMENT_CHOICES,
+                'selected_instruments': selected_instruments,
+                'selected_genres': selected_genres,
             })
 
         # Validate instruments and genres for musicians
@@ -73,6 +83,8 @@ def register(request):
                 return render(request, 'accounts/register.html', {
                     'genre_choices': GENRE_CHOICES,
                     'instrument_choices': INSTRUMENT_CHOICES,
+                    'selected_instruments': selected_instruments,
+                    'selected_genres': selected_genres,
                 })
             
             if not selected_genres:
@@ -80,6 +92,8 @@ def register(request):
                 return render(request, 'accounts/register.html', {
                     'genre_choices': GENRE_CHOICES,
                     'instrument_choices': INSTRUMENT_CHOICES,
+                    'selected_instruments': selected_instruments,
+                    'selected_genres': selected_genres,
                 })
 
         # --- Create user ---
@@ -116,6 +130,8 @@ def register(request):
     return render(request, 'accounts/register.html', {
         'genre_choices': GENRE_CHOICES,
         'instrument_choices': INSTRUMENT_CHOICES,
+        'selected_instruments': [],
+        'selected_genres': [],
     })
 
 

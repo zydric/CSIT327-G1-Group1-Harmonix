@@ -53,7 +53,7 @@
                         <label class="flex items-center space-x-2 text-sm">
                             <input type="checkbox" name="instruments" value="{{ value }}" 
                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                   {% if value in request.POST.getlist:'instruments' %}checked{% endif %}>
+                                   {% if value in request.POST.instruments %}checked{% endif %}>
                             <span>{{ label }}</span>
                         </label>
                         {% endfor %}
@@ -69,7 +69,7 @@
                         <label class="flex items-center space-x-2 text-sm">
                             <input type="checkbox" name="genres" value="{{ value }}" 
                                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                   {% if value in request.POST.getlist:'genres' %}checked{% endif %}>
+                                   {% if value in request.POST.genres %}checked{% endif %}>
                             <span>{{ label }}</span>
                         </label>
                         {% endfor %}
