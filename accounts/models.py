@@ -76,6 +76,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Returns True if the user is a band admin."""
         return self.role == 'band'
 
+    @property
+    def instruments_list(self):
+        """Returns list of instruments from comma-separated string"""
+        if self.instruments:
+            return [instrument.strip() for instrument in self.instruments.split(',') if instrument.strip()]
+        return []
+    
+    @property
+    def genres_list(self):
+        """Returns list of genres from comma-separated string"""
+        if self.genres:
+            return [genre.strip() for genre in self.genres.split(',') if genre.strip()]
+        return []
+
 
 # ============================
 # Musician Profile Model
