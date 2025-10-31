@@ -91,10 +91,10 @@
 
             
             <div class="flex justify-center gap-4">
-                <a href="{% url 'edit_profile' %}" class="px-8 py-3 rounded-full font-semibold transition" style="background-color: var(--light-bg); color: var(--primary-color);">
+                <a href="{% url 'accounts:edit_profile' %}" class="px-8 py-3 rounded-full font-semibold transition" style="background-color: var(--light-bg); color: var(--primary-color);">
                     Edit Profile
                 </a>
-                <a href="{% url 'logout' %}" class="px-8 py-3 rounded-full text-white font-semibold transition hover:opacity-90 flex items-center gap-2" style="background-color: var(--primary-color);">
+                <a href="{% url 'accounts:logout' %}" class="px-8 py-3 rounded-full text-white font-semibold transition hover:opacity-90 flex items-center gap-2" style="background-color: var(--primary-color);">
                     Logout
                 </a>
             </div>
