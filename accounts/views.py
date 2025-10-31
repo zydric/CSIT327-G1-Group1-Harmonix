@@ -263,3 +263,21 @@ def edit_profile_view(request):
         'user': user
     }
     return render(request, 'accounts/edit_musician_profile.html', context)
+
+
+@login_required
+def view_profile(request, username):
+    """
+    View another user's profile
+    """
+    from django.shortcuts import get_object_or_404
+    
+    profile_user = get_object_or_404(User, username=username)
+    
+    context = {
+        'profile_user': profile_user,
+        'user': request.user,
+        'is_own_profile': request.user == profile_user,
+    }
+    
+    return render(request, 'accounts/view_profile.html', context)
