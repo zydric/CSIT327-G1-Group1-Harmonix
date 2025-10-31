@@ -31,7 +31,7 @@
             </p>
         </div>
 
-        <form class="mt-8 space-y-6" method="POST" action="{% url 'register' %}">
+        <form class="mt-8 space-y-6" method="POST" action="{% url 'accounts:register' %}">
             {% csrf_token %}
             <div class="rounded-md space-y-3">
                 
@@ -161,7 +161,7 @@
 
             <div class="text-center">
                 <span class="text-gray-600">Already have an account?</span>
-                <a href="{% url 'login' %}" class="font-semibold text-[#4F2FC0] hover:text-[indigo-500]">
+                <a href="{% url 'accounts:login' %}" class="font-semibold text-[#4F2FC0] hover:text-[indigo-500]">
                     Login
                 </a>
             </div>
