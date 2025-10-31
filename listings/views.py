@@ -35,20 +35,20 @@ def listings_view(request):
             )
         
         if genre_filter:
-            listings = listings.filter(genres__icontains=genre_filter)
+            # Convert filter value to proper case for matching
+            genre_display = dict(Listing.GENRE_CHOICES).get(genre_filter, genre_filter)
+            listings = listings.filter(genres__icontains=genre_display)
             
         if instrument_filter:
-            listings = listings.filter(instruments_needed__icontains=instrument_filter)
+            # Convert filter value to proper case for matching
+            instrument_display = dict(Listing.INSTRUMENT_CHOICES).get(instrument_filter, instrument_filter)
+            listings = listings.filter(instruments_needed__icontains=instrument_display)
             
         # Order by newest first
         listings = listings.order_by('-created_at')
         
         # Get unique filter options for dropdowns
         all_listings = Listing.objects.filter(is_active=True)
-        
-        # Use standardized genre choices
-        available_genres = [choice[0] for choice in Listing.GENRE_CHOICES]
-        available_instruments = [choice[0] for choice in Listing.INSTRUMENT_CHOICES]
         
         # Get actual genres and instruments from listings
         used_genres = set()
@@ -58,10 +58,15 @@ def listings_view(request):
             used_genres.update(listing.genres_list)
             used_instruments.update(listing.instruments_list)
         
-        # Filter to only show genres/instruments that are actually used and in our choices
+        # Create filter options with proper case matching
+        # Convert used items to lowercase for comparison
+        used_genres_lower = {g.lower() for g in used_genres}
+        used_instruments_lower = {i.lower() for i in used_instruments}
+        
+        # Filter to only show genres/instruments that are actually used
         filter_options = {
-            'genres': [g for g in available_genres if g in used_genres],
-            'instruments': [i for i in available_instruments if i in used_instruments],
+            'genres': [choice for choice in Listing.GENRE_CHOICES if choice[0] in used_genres_lower],
+            'instruments': [choice for choice in Listing.INSTRUMENT_CHOICES if choice[0] in used_instruments_lower],
         }
         
     else:  # Band admin
