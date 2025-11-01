@@ -24,12 +24,12 @@
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4">
     <div id="app" class="max-w-2xl mx-auto">
 
-        <form id="editMode" method="POST" action="{% url 'edit_profile' %}">
+        <form id="editMode" method="POST" action="{% url 'accounts:edit_profile' %}">
             
             {% csrf_token %}
             
             <div class="mb-8 flex items-center relative">
-                <a href="{% url 'musician_profile' %}" class="text-gray-600 hover:text-gray-900 transition absolute left-0 top-1/2 -translate-y-1/2">
+                <a href="{% url 'accounts:musician_profile' %}" class="text-gray-600 hover:text-gray-900 transition absolute left-0 top-1/2 -translate-y-1/2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
@@ -99,7 +99,7 @@
             </div>
 
             <div class="flex justify-center gap-4">
-                <a href="{% url 'musician_profile' %}" class="px-8 py-3 rounded-full font-semibold transition text-center" style="background-color: var(--light-bg); color: var(--primary-color);">Cancel</a>
+                <a href="{% url 'accounts:musician_profile' %}" class="px-8 py-3 rounded-full font-semibold transition text-center" style="background-color: var(--light-bg); color: var(--primary-color);">Cancel</a>
                 <button type="submit" class="px-8 py-3 rounded-full text-white font-semibold transition hover:opacity-90" style="background-color: var(--primary-color);">Save</button>
             </div>
 

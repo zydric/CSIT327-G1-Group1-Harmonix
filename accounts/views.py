@@ -159,7 +159,7 @@ def register(request):
             user.save()
             
             messages.success(request, 'Registration successful! Please login.')
-            return redirect('login')
+            return redirect('accounts:login')
 
         except Exception as e:
             messages.error(request, f'Registration failed: {str(e)}')
@@ -219,7 +219,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
-    return redirect('login')
+    return redirect('accounts:login')
 
 
 # ============================
@@ -253,7 +253,7 @@ def edit_profile_view(request):
         try:
             user.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('musician_profile') 
+            return redirect('accounts:musician_profile') 
         except Exception as e:
             # Handle potential save errors (e.g., username already taken)
             messages.error(request, f'An error occurred: {e}')
@@ -263,3 +263,21 @@ def edit_profile_view(request):
         'user': user
     }
     return render(request, 'accounts/edit_musician_profile.html', context)
+
+
+@login_required
+def view_profile(request, username):
+    """
+    View another user's profile
+    """
+    from django.shortcuts import get_object_or_404
+    
+    profile_user = get_object_or_404(User, username=username)
+    
+    context = {
+        'profile_user': profile_user,
+        'user': request.user,
+        'is_own_profile': request.user == profile_user,
+    }
+    
+    return render(request, 'accounts/view_profile.html', context)

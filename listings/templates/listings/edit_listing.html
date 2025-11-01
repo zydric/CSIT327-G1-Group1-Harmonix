@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="w-8 h-8 flex items-center justify-center mr-3">
+                        <img src="{% static 'images/harmonix_logo.png' %}" alt="Harmonix Logo" class="w-full h-full">
+                    </div>
+                    <h1 class="text-[#4F2FC0] text-xl font-bold">Harmonix</h1>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="flex space-x-8 text-sm font-medium text-gray-700">
+                    <a href="{% url 'listings:feed' %}" class="hover:text-[#4F2FC0] transition-colors">
+                        LISTINGS
+                    </a>
+                    <a href="{% url 'accounts:musician_profile' %}" class="hover:text-[#4F2FC0] transition-colors">
+                        PROFILE
+                    </a>
+                    <a href="{% url 'applications:my_applications' %}" class="hover:text-[#4F2FC0] transition-colors">
+                        APPLICATIONS
+                    </a>
+                    <a href="{% url 'accounts:logout' %}" class="hover:text-[#4F2FC0] transition-colors">
+                        LOGOUT
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center mb-4">
+                <a href="{% url 'listings:detail' pk=listing.pk %}" class="mr-4 text-gray-500 hover:text-[#4F2FC0] transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </a>
+                <h1 class="text-3xl font-bold text-gray-900">Edit Listing</h1>
+            </div>
+            <p class="text-gray-600">
+                Update your listing details to better attract the right musicians for your band.
+            </p>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+            <form method="post" id="listingForm" novalidate>
+                {% csrf_token %}
+                
+                <!-- Display form-wide errors -->
+                {% if form.non_field_errors %}
+                    <div class="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
+                        {% for error in form.non_field_errors %}
+                            <p class="text-red-700 text-sm">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="space-y-6">
+                    <!-- Title Field -->
+                    <div>
+                        <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Listing Title *
+                        </label>
+                        {{ form.title }}
+                        <p class="mt-1 text-sm text-gray-500">{{ form.title.help_text }}</p>
+                        {% if form.title.errors %}
+                            <div class="mt-1">
+                                {% for error in form.title.errors %}
+                                    <p class="text-red-600 text-sm">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Band Name Field -->
+                    <div>
+                        <label for="{{ form.band_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Band Name *
+                        </label>
+                        {{ form.band_name }}
+                        <p class="mt-1 text-sm text-gray-500">{{ form.band_name.help_text }}</p>
+                        {% if form.band_name.errors %}
+                            <div class="mt-1">
+                                {% for error in form.band_name.errors %}
+                                    <p class="text-red-600 text-sm">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Description Field -->
+                    <div>
+                        <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Description *
+                        </label>
+                        {{ form.description }}
+                        <p class="mt-1 text-sm text-gray-500">{{ form.description.help_text }}</p>
+                        {% if form.description.errors %}
+                            <div class="mt-1">
+                                {% for error in form.description.errors %}
+                                    <p class="text-red-600 text-sm">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Instruments Needed -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            Instruments Needed *
+                        </label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {% for choice in form.instruments_needed %}
+                                <label class="flex items-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer transition-colors">
+                                    {{ choice.tag }}
+                                    <span class="ml-2 text-sm text-gray-700">{{ choice.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">{{ form.instruments_needed.help_text }}</p>
+                        {% if form.instruments_needed.errors %}
+                            <div class="mt-2">
+                                {% for error in form.instruments_needed.errors %}
+                                    <p class="text-red-600 text-sm">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Genres -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            Genres *
+                        </label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {% for choice in form.genres %}
+                                <label class="flex items-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer transition-colors">
+                                    {{ choice.tag }}
+                                    <span class="ml-2 text-sm text-gray-700">{{ choice.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">{{ form.genres.help_text }}</p>
+                        {% if form.genres.errors %}
+                            <div class="mt-2">
+                                {% for error in form.genres.errors %}
+                                    <p class="text-red-600 text-sm">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Active Status -->
+                    <div class="bg-gray-50 p-4 rounded-md">
+                        <label class="flex items-center">
+                            <input type="checkbox" 
+                                   name="is_active" 
+                                   value="True"
+                                   {% if listing.is_active %}checked{% endif %}
+                                   class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+                            <span class="ml-2 text-sm font-medium text-gray-700">
+                                Keep this listing active and accepting applications
+                            </span>
+                        </label>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Uncheck this if you want to temporarily disable applications for this listing.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                    <a href="{% url 'listings:detail' pk=listing.pk %}" 
+                       class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" 
+                            class="px-6 py-2 bg-[#4F2FC0] text-white rounded-md hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                        Update Listing
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add visual feedback for form validation
+    const form = document.getElementById('listingForm');
+    const requiredFields = form.querySelectorAll('input[required], textarea[required]');
+    
+    // Add error styling to fields with errors
+    const errorFields = form.querySelectorAll('.text-red-600');
+    errorFields.forEach(errorMsg => {
+        const field = errorMsg.closest('div').querySelector('input, textarea');
+        if (field) {
+            field.classList.add('border-red-300', 'focus:border-red-500', 'focus:ring-red-500');
+            field.classList.remove('border-gray-300', 'focus:border-transparent', 'focus:ring-purple-500');
+        }
+    });
+    
+    // Real-time validation for required fields
+    requiredFields.forEach(field => {
+        field.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.classList.add('border-red-300');
+                this.classList.remove('border-gray-300');
+            } else {
+                this.classList.remove('border-red-300');
+                this.classList.add('border-gray-300');
+            }
+        });
+    });
+    
+    // Visual feedback for checkbox selections
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]:not([name="is_active"])');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const label = this.closest('label');
+            if (this.checked) {
+                label.classList.add('bg-purple-50', 'border-purple-300');
+                label.classList.remove('border-gray-200');
+            } else {
+                label.classList.remove('bg-purple-50', 'border-purple-300');
+                label.classList.add('border-gray-200');
+            }
+        });
+        
+        // Apply initial state for pre-checked boxes
+        if (checkbox.checked) {
+            const label = checkbox.closest('label');
+            label.classList.add('bg-purple-50', 'border-purple-300');
+            label.classList.remove('border-gray-200');
+        }
+    });
+});
+</script>
+{% endblock %}
