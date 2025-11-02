@@ -209,7 +209,6 @@ def delete_listing(request, pk):
     if request.method == 'POST':
         listing_title = listing.title
         listing.delete()
-        messages.success(request, f'Listing "{listing_title}" has been deleted successfully.')
         return redirect('listings:feed')
     
     # If not POST, redirect back to listing detail
