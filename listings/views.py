@@ -64,9 +64,13 @@ def listings_view(request):
         used_instruments_lower = {i.lower() for i in used_instruments}
         
         # Filter to only show genres/instruments that are actually used
+        # Convert choices to dict to get display values, and ensure uniqueness
+        genre_choices_dict = dict(Listing.GENRE_CHOICES)
+        instrument_choices_dict = dict(Listing.INSTRUMENT_CHOICES)
+        
         filter_options = {
-            'genres': [choice for choice in Listing.GENRE_CHOICES if choice[0] in used_genres_lower],
-            'instruments': [choice for choice in Listing.INSTRUMENT_CHOICES if choice[0] in used_instruments_lower],
+            'genres': [(key, value) for key, value in genre_choices_dict.items() if key in used_genres_lower],
+            'instruments': [(key, value) for key, value in instrument_choices_dict.items() if key in used_instruments_lower],
         }
         
     else:  # Band admin
