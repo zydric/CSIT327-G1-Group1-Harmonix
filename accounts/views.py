@@ -204,7 +204,6 @@ def login_view(request):
         if user is not None:
             # Login successful
             auth_login(request, user)
-            messages.success(request, f'Welcome back, {user.username}!')
             
             # Redirect to 'next' page or default to 'listings:feed'
             next_page = request.GET.get('next', 'listings:feed')
@@ -223,7 +222,6 @@ def login_view(request):
 @never_cache  # Prevents caching of the logout page
 def logout_view(request):
     logout(request)
-    messages.success(request, 'You have been logged out successfully.')
     return redirect('accounts:login')
 
 
