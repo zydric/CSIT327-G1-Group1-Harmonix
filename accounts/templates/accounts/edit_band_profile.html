@@ -78,19 +78,6 @@
                             </span>
                         </div>
 
-                        <!-- Instruments Section -->
-                        <div class="mb-6">
-                            <h3 class="font-bold text-gray-900 mb-3">Instruments</h3>
-                            <div class="flex flex-wrap gap-2" id="sidebarInstruments">
-                                {% for instrument in user.instruments.split %}
-                                <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
-                                    {{ instrument }}
-                                </span>
-                                {% empty %}
-                                <span class="text-gray-500 text-sm">{{ user.instruments }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
 
                         <!-- Genres Section -->
                         <div>
@@ -122,13 +109,13 @@
                                     <label class="block font-semibold text-gray-900 mb-2">Username</label>
                                     <input type="text" value="{{ user.username }}"
                                         class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
-                                        >
+                                        readonly>
                                 </div>
                                 <div>
                                     <label class="block font-semibold text-gray-900 mb-2">Email</label>
                                     <input type="email" value="{{ user.email }}"
                                         class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
-                                        >
+                                        readonly>
                                 </div>
                             </div>
 
@@ -209,20 +196,6 @@
                             </span>
                         </div>
 
-                        <!-- Instruments Section (Live Update) -->
-                        <div class="mb-6">
-                            <h3 class="font-bold text-gray-900 mb-3">Instruments</h3>
-                            <div class="flex flex-wrap gap-2" id="editSidebarInstruments">
-                                {% for instrument in user.instruments.split %}
-                                <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
-                                    {{ instrument }}
-                                </span>
-                                {% empty %}
-                                <span class="text-gray-500 text-sm">{{ user.instruments }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-
                         <!-- Genres Section (Live Update) -->
                         <div>
                             <h3 class="font-bold text-gray-900 mb-3">Genres</h3>
@@ -253,13 +226,13 @@
                                     <label class="block font-semibold text-gray-900 mb-2">Username</label>
                                     <input type="text" value="{{ user.username }}"
                                         class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
-                                        >
+                                        readonly>
                                 </div>
                                 <div>
                                     <label class="block font-semibold text-gray-900 mb-2">Email</label>
                                     <input type="email" value="{{ user.email }}"
                                         class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
-                                        >
+                                        readonly>
                                 </div>
                             </div>
 
@@ -268,7 +241,7 @@
                                 <label class="block font-semibold text-gray-900 mb-2">Location</label>
                                 <input type="text" value="{{ user.location }}"
                                     class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
-                                    >
+                                    readonly>
                             </div>
 
                             <!-- Bio -->
@@ -278,16 +251,6 @@
                                     class="w-full px-4 py-3 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none h-32 resize-none"
                                     >{{ user.bio }}</textarea>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Instruments Section -->
-                    <div class="bg-white border border-gray-200 rounded-2xl p-8">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Instruments</h2>
-                        <p class="text-gray-600 mb-6">Select all instruments you play</p>
-
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="instrumentsGrid">
-                            <!-- Instruments will be generated by JavaScript -->
                         </div>
                     </div>
 
@@ -307,47 +270,16 @@
 
     <script>
         // Data
-        const initialInstruments = ['{{ user.instruments.split|join:"\', \'" }}'];
         const initialGenres = ['{{ user.genres.split|join:"\', \'" }}'];
 
-        const allInstruments = ['Guitar', 'Bass', 'Drums', 'Vocals', 'Keyboard', 'Piano', 'Saxophone', 'Violin', 'Trumpet', 'Flute'];
         const allGenres = ['Rock', 'Jazz', 'Blues', 'Folk', 'Country', 'Electronic', 'Indie', 'Pop', 'Classical', 'Hip-Hop'];
 
-        let selectedInstruments = [...initialInstruments];
         let selectedGenres = [...initialGenres];
 
         // Initialize edit mode on page load
         function initEditMode() {
-            renderInstrumentsGrid();
             renderGenresGrid();
             updateEditSidebar();
-        }
-
-        // Render instruments grid with interactive buttons
-        function renderInstrumentsGrid() {
-            const grid = document.getElementById('instrumentsGrid');
-            grid.innerHTML = '';
-
-            allInstruments.forEach(instrument => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = `px-4 py-3 rounded-lg font-semibold transition flex items-center gap-2 border-2 ${selectedInstruments.includes(instrument)
-                    ? 'text-white border-0'
-                    : 'text-gray-900 border-gray-200 bg-white hover:border-gray-300'
-                    }`;
-                button.style.backgroundColor = selectedInstruments.includes(instrument) ? 'var(--primary-color)' : 'transparent';
-
-                button.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/>
-                    </svg>
-                    ${instrument}
-                `;
-
-
-                button.onclick = () => toggleInstrument(instrument);
-                grid.appendChild(button);
-            });
         }
 
         // Render genres grid with interactive buttons
@@ -370,18 +302,6 @@
             });
         }
 
-        // Toggle instrument selection
-        function toggleInstrument(instrument) {
-            const index = selectedInstruments.indexOf(instrument);
-            if (index > -1) {
-                selectedInstruments.splice(index, 1);
-            } else {
-                selectedInstruments.push(instrument);
-            }
-            renderInstrumentsGrid();
-            updateEditSidebar();
-        }
-
         // Toggle genre selection
         function toggleGenre(genre) {
             const index = selectedGenres.indexOf(genre);
@@ -396,12 +316,7 @@
 
         // Update sidebar in edit mode
         function updateEditSidebar() {
-            const instrumentsContainer = document.getElementById('editSidebarInstruments');
             const genresContainer = document.getElementById('editSidebarGenres');
-
-            instrumentsContainer.innerHTML = selectedInstruments.map(inst =>
-                `<span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">${inst}</span>`
-            ).join('');
 
             genresContainer.innerHTML = selectedGenres.map(genre =>
                 `<span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">${genre}</span>`
