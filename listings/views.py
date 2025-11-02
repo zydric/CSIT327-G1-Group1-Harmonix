@@ -178,7 +178,6 @@ def edit_listing(request, pk):
         form = ListingForm(request.POST, instance=listing)
         if form.is_valid():
             listing = form.save()
-            messages.success(request, f'Listing "{listing.title}" has been updated successfully!')
             return redirect('listings:detail', pk=listing.pk)
         else:
             messages.error(request, "Please fix the errors below and try again.")
