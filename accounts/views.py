@@ -16,6 +16,11 @@ from harmonix.constants import GENRE_CHOICES, INSTRUMENT_CHOICES
 
 from .models import User
 
+def band_profile_view(request):
+    return render(request, 'accounts/band_profile.html')
+
+def edit_band_profile_view(request):
+    return render(request, 'accounts/edit_band_profile.html')
 # ============================
 # Validation Helper Functions
 # ============================
