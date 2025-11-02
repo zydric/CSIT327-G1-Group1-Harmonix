@@ -153,7 +153,7 @@ LOGOUT_REDIRECT_URL = 'login'
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3'),
-        conn_max_age=600,
+        conn_max_age=0 if ENV == 'development' else 600,
         ssl_require=ENV == 'production',  # Only require SSL in production
     )
 }
