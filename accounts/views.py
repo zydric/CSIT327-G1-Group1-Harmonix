@@ -8,7 +8,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
 from harmonix.constants import GENRE_CHOICES, INSTRUMENT_CHOICES
-from django.conf import settings
+
 
 # REST FRAMEWORKS (Imports are not used in these views)
 # from rest_framework.decorators import api_view, permission_classes
@@ -147,8 +147,8 @@ def register(request):
         # --- Create user ---
         try:
             # Convert lists to comma-separated strings
-            instruments_str = ', '.join(selected_instruments) if selected_instruments else ''
-            genres_str = ', '.join(selected_genres) if selected_genres else ''
+            instruments_str = ', '.join(filter(None, selected_instruments)) if selected_instruments else ''
+            genres_str = ', '.join(filter(None, selected_genres)) if selected_genres else ''
             
             user = User.objects.create_user(
                 username=username,
@@ -279,8 +279,8 @@ def edit_musician_profile_view(request):
     # Handle GET request
     context = {
         'user': user,
-        'instruments': user.instruments.split(',') if user.instruments else [],
-        'genres': user.genres.split(',') if user.genres else []
+        'instruments': [x.strip() for x in user.instruments.split(',')] if user.instruments else [],
+        'genres': [x.strip() for x in user.genres.split(',')] if user.genres else []
     }
     return render(request, 'accounts/edit_musician_profile.html', context)
 

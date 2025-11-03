@@ -237,14 +237,14 @@
                 grid.appendChild(button);
 
                 // Update hidden input for instruments
-                let input = document.querySelector('input[name="instruments"]');
+                input = document.querySelector('input[name="instruments"]');
                 if (!input) {
                     input = document.createElement('input');
                     input.type = 'hidden';
                     input.name = 'instruments';
                     document.getElementById('profile-form').appendChild(input);
                 }
-                input.value = selectedInstruments.join(',');
+                input.value = selectedInstruments.filter(i => i).join(', ');
             });
         }
 
@@ -274,7 +274,7 @@
                     input.name = 'genres';
                     document.getElementById('profile-form').appendChild(input);
                 }
-                input.value = selectedGenres.join(',');
+                input.value = selectedGenres.filter(g => g).join(', ');
             });
         }
 
