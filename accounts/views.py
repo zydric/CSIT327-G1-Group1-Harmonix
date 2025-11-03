@@ -242,7 +242,7 @@ def musician_profile_view(request):
 # ============================
 @login_required
 @csrf_protect
-def edit_profile_view(request):
+def edit_musician_profile_view(request):
     user = request.user
     
     if request.method == 'POST':

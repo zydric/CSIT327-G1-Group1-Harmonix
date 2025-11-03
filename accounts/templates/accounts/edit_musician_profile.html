@@ -23,20 +23,49 @@
 
 <body class="bg-white min-h-screen p-8">
     <div id="app" class="max-w-7xl mx-auto">
-        <div id="viewMode">
+        <!-- Nav Bar -->
+        <nav class="bg-white shadow-sm border-b border-gray-200 mb-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo -->
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 flex items-center justify-center mr-3">
+                            <img src="{% static 'images/harmonix_logo.png' %}" alt="Harmonix Logo" class="w-full h-full">
+                        </div>
+                        <h1 class="text-[#4F2FC0] text-xl font-bold">Harmonix</h1>
+                    </div>
 
-            <!-- Header -->
-            <div class="mb-8 flex items-start justify-between">
-                <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>
-                    <p class="text-gray-600">Manage your musical profile and preferences</p>
+                    <!-- Navigation Links -->
+                    <div class="flex space-x-8 text-sm font-medium text-gray-700">
+                        <a href="{% url 'listings:feed' %}" class="hover:text-[#4F2FC0] transition-colors">
+                            LISTINGS
+                        </a>
+                        <a href="{% url 'accounts:musician_profile' %}" class="text-[#4F2FC0] border-b-2 border-[#4F2FC0] pb-4 -mb-px">
+                            PROFILE
+                        </a>
+                        <a href="{% url 'applications:my_applications' %}" class="hover:text-[#4F2FC0] transition-colors">
+                            APPLICATIONS
+                        </a>
+                        <a href="{% url 'accounts:logout' %}" class="hover:text-[#4F2FC0] transition-colors">
+                            LOGOUT
+                        </a>
+                    </div>
                 </div>
-                <button onclick="switchToEdit()"
-                    class="px-6 py-3 rounded-lg font-semibold text-white transition hover:opacity-90"
-                    style="background-color: var(--primary-color);">
-                    Edit Profile
-                </button>
             </div>
+        </nav>
+
+        <!-- Header -->
+        <div class="mb-8 flex items-start justify-between">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">Edit Profile</h1>
+                <p class="text-gray-600">Manage your musical profile and preferences</p>
+            </div>
+            <button type="submit" form="profile-form"
+                class="px-6 py-3 rounded-lg font-semibold text-white transition hover:opacity-90"
+                style="background-color: var(--primary-color);">
+                Save Changes
+            </button>
+        </div>
 
             <!-- Main Content - Two Column Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -47,7 +76,8 @@
                         <!-- Profile Avatar -->
                         <div class="flex justify-center mb-6">
                             <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400"
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12
+                                 text-gray-400"
                                     viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                                         clip-rule="evenodd" />
@@ -153,21 +183,9 @@
             </div>
         </div>
 
-        <!-- Added edit mode section -->
-        <div id="editMode" class="hidden">
-
-            <!-- Header -->
-            <div class="mb-8 flex items-start justify-between">
-                <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Edit Profile</h1>
-                    <p class="text-gray-600">Manage your musical profile and preferences</p>
-                </div>
-                <button onclick="switchToView()"
-                    class="px-6 py-3 rounded-lg font-semibold text-white transition hover:opacity-90"
-                    style="background-color: var(--primary-color);">
-                    Save Changes
-                </button>
-            </div>
+        <!-- Edit mode section -->
+        <form id="profile-form" method="POST">
+            {% csrf_token %}
 
             <!-- Main Content - Two Column Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -316,12 +334,12 @@
         let selectedInstruments = [...initialInstruments];
         let selectedGenres = [...initialGenres];
 
-        // Initialize edit mode on page load
-        function initEditMode() {
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
             renderInstrumentsGrid();
             renderGenresGrid();
-            updateEditSidebar();
-        }
+            updateSidebar();
+        });
 
         // Render instruments grid with interactive buttons
         function renderInstrumentsGrid() {
@@ -344,9 +362,15 @@
                     ${instrument}
                 `;
 
-
                 button.onclick = () => toggleInstrument(instrument);
                 grid.appendChild(button);
+
+                // Add hidden input for form submission
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'instruments';
+                input.value = selectedInstruments.join(',');
+                document.getElementById('profile-form').appendChild(input);
             });
         }
 
@@ -367,6 +391,13 @@
 
                 button.onclick = () => toggleGenre(genre);
                 grid.appendChild(button);
+
+                // Add hidden input for form submission
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'genres';
+                input.value = selectedGenres.join(',');
+                document.getElementById('profile-form').appendChild(input);
             });
         }
 
@@ -379,7 +410,7 @@
                 selectedInstruments.push(instrument);
             }
             renderInstrumentsGrid();
-            updateEditSidebar();
+            updateSidebar();
         }
 
         // Toggle genre selection
@@ -391,13 +422,13 @@
                 selectedGenres.push(genre);
             }
             renderGenresGrid();
-            updateEditSidebar();
+            updateSidebar();
         }
 
-        // Update sidebar in edit mode
-        function updateEditSidebar() {
-            const instrumentsContainer = document.getElementById('editSidebarInstruments');
-            const genresContainer = document.getElementById('editSidebarGenres');
+        // Update sidebar
+        function updateSidebar() {
+            const instrumentsContainer = document.getElementById('sidebarInstruments');
+            const genresContainer = document.getElementById('sidebarGenres');
 
             instrumentsContainer.innerHTML = selectedInstruments.map(inst =>
                 `<span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">${inst}</span>`
@@ -406,19 +437,6 @@
             genresContainer.innerHTML = selectedGenres.map(genre =>
                 `<span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">${genre}</span>`
             ).join('');
-        }
-
-        // Switch to edit mode
-        function switchToEdit() {
-            document.getElementById('viewMode').classList.add('hidden');
-            document.getElementById('editMode').classList.remove('hidden');
-            initEditMode();
-        }
-
-        // Switch to view mode
-        function switchToView() {
-            document.getElementById('viewMode').classList.remove('hidden');
-            document.getElementById('editMode').classList.add('hidden');
         }
     </script>
 </body>
