@@ -8,6 +8,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
 from harmonix.constants import GENRE_CHOICES, INSTRUMENT_CHOICES
+from django.conf import settings
 
 # REST FRAMEWORKS (Imports are not used in these views)
 # from rest_framework.decorators import api_view, permission_classes

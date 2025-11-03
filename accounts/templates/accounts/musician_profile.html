@@ -20,6 +20,7 @@
 </head>
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block content %}
 <body class="bg-white min-h-screen p-8">
     <div id="app" class="max-w-7xl mx-auto">
@@ -96,13 +97,15 @@
                         <div class="mb-6">
                             <h3 class="font-bold text-gray-900 mb-3">Instruments</h3>
                             <div class="flex flex-wrap gap-2">
-                                {% for instrument in user.instruments.split %}
-                                <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
-                                    {{ instrument }}
-                                </span>
+                                {% with instruments=user.instruments|default:'' %}
+                                {% for instrument in instruments|split:',' %}
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
+                                        {{ instrument }}
+                                    </span>
                                 {% empty %}
-                                <span class="text-gray-500 text-sm">{{ user.instruments }}</span>
+                                    <span class="text-gray-500 text-sm">No instruments selected</span>
                                 {% endfor %}
+                                {% endwith %}
                             </div>
                         </div>
 
@@ -110,13 +113,15 @@
                         <div>
                             <h3 class="font-bold text-gray-900 mb-3">Genres</h3>
                             <div class="flex flex-wrap gap-2">
-                                {% for genre in user.genres.split %}
-                                <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
-                                    {{ genre }}
-                                </span>
+                                {% with genres=user.genres|default:'' %}
+                                {% for genre in genres|split:',' %}
+                                    <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
+                                        {{ genre }}
+                                    </span>
                                 {% empty %}
-                                <span class="text-gray-500 text-sm">{{ user.genres }}</span>
+                                    <span class="text-gray-500 text-sm">No genres selected</span>
                                 {% endfor %}
+                                {% endwith %}
                             </div>
                         </div>
                     </div>
