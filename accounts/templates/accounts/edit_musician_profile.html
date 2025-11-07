@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load custom_filters %}
 <html lang="en">
 
 <head>
@@ -101,7 +102,7 @@
                         <div class="mb-6">
                             <h3 class="font-bold text-gray-900 mb-3">Instruments</h3>
                             <div class="flex flex-wrap gap-2" id="sidebarInstruments">
-                                {% for instrument in user.instruments.split %}
+                                {% for instrument in user.instruments|split:',' %}
                                 <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
                                     {{ instrument }}
                                 </span>
@@ -115,7 +116,7 @@
                         <div>
                             <h3 class="font-bold text-gray-900 mb-3">Genres</h3>
                             <div class="flex flex-wrap gap-2" id="sidebarGenres">
-                                {% for genre in user.genres.split %}
+                                {% for genre in user.genres|split:',' %}
                                 <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
                                     {{ genre }}
                                 </span>
@@ -196,8 +197,8 @@
 
     <script>
         // Data
-        const initialInstruments = ['{{ user.instruments.split|join:"\', \'" }}'];
-        const initialGenres = ['{{ user.genres.split|join:"\', \'" }}'];
+    const initialInstruments = ('{{ user.instruments|default:""|escapejs }}').split(',').map(s => s.trim()).filter(Boolean);
+    const initialGenres = ('{{ user.genres|default:""|escapejs }}').split(',').map(s => s.trim()).filter(Boolean);
 
         const allInstruments = ['Guitar', 'Bass', 'Drums', 'Vocals', 'Keyboard', 'Piano', 'Saxophone', 'Violin', 'Trumpet', 'Flute'];
         const allGenres = ['Rock', 'Jazz', 'Blues', 'Folk', 'Country', 'Electronic', 'Indie', 'Pop', 'Classical', 'Hip-Hop'];
