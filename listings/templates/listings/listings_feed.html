@@ -77,18 +77,17 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
                             <input type="text" name="search" value="{{ current_filters.search }}" 
                                    placeholder="Search listings..." 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#4F2FC0] focus:border-transparent"
-                                   onkeyup="debounceSearch(this)">
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#4F2FC0] focus:border-transparent">
                         </div>
 
                         <!-- Genre Filter -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Genre</label>
                             <div class="relative">
-                                <select name="genre" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#4F2FC0] focus:border-transparent appearance-none bg-white pr-8" onchange="this.form.submit()">
+                                <select name="genre" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#4F2FC0] focus:border-transparent appearance-none bg-white pr-8">
                                     <option value="">All genres</option>
-                                    {% for genre in filter_options.genres %}
-                                    <option value="{{ genre }}" {% if current_filters.genre == genre %}selected{% endif %}>{{ genre }}</option>
+                                    {% for key, display in filter_options.genres %}
+                                    <option value="{{ key }}" {% if current_filters.genre == key %}selected{% endif %}>{{ display }}</option>
                                     {% endfor %}
                                 </select>
                                 <!-- Custom dropdown arrow -->
@@ -104,10 +103,10 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Instrument</label>
                             <div class="relative">
-                                <select name="instrument" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#4F2FC0] focus:border-transparent appearance-none bg-white pr-8" onchange="this.form.submit()">
+                                <select name="instrument" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#4F2FC0] focus:border-transparent appearance-none bg-white pr-8">
                                     <option value="">All instruments</option>
-                                    {% for instrument in filter_options.instruments %}
-                                    <option value="{{ instrument }}" {% if current_filters.instrument == instrument %}selected{% endif %}>{{ instrument }}</option>
+                                    {% for key, display in filter_options.instruments %}
+                                    <option value="{{ key }}" {% if current_filters.instrument == key %}selected{% endif %}>{{ display }}</option>
                                     {% endfor %}
                                 </select>
                                 <!-- Custom dropdown arrow -->
@@ -275,17 +274,6 @@
 </div>
 
 <script>
-let searchTimeout;
-
-function debounceSearch(input) {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(function() {
-        if (input.value.length >= 2 || input.value.length === 0) {
-            input.form.submit();
-        }
-    }, 500);
-}
-
 // Add visual feedback for filtering
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('filterForm');
@@ -299,6 +287,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.style.opacity = '1';
             }, 200);
         });
+    });
+
+    // Add loading state for Apply Filters button
+    const applyButton = form.querySelector('button[type="submit"]');
+    applyButton.addEventListener('click', function() {
+        this.disabled = true;
+        this.innerHTML = 'Applying...';
+        form.submit();
     });
 });
 </script>

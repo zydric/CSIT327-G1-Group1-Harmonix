@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 import re
 from harmonix.constants import GENRE_CHOICES, INSTRUMENT_CHOICES
 
+
 # REST FRAMEWORKS (Imports are not used in these views)
 # from rest_framework.decorators import api_view, permission_classes
 # from rest_framework.permissions import IsAuthenticated
@@ -146,8 +147,8 @@ def register(request):
         # --- Create user ---
         try:
             # Convert lists to comma-separated strings
-            instruments_str = ', '.join(selected_instruments) if selected_instruments else ''
-            genres_str = ', '.join(selected_genres) if selected_genres else ''
+            instruments_str = ', '.join(filter(None, selected_instruments)) if selected_instruments else ''
+            genres_str = ', '.join(filter(None, selected_genres)) if selected_genres else ''
             
             user = User.objects.create_user(
                 username=username,
@@ -204,7 +205,6 @@ def login_view(request):
         if user is not None:
             # Login successful
             auth_login(request, user)
-            messages.success(request, f'Welcome back, {user.username}!')
             
             # Redirect to 'next' page or default to 'listings:feed'
             next_page = request.GET.get('next', 'listings:feed')
@@ -223,7 +223,6 @@ def login_view(request):
 @never_cache  # Prevents caching of the logout page
 def logout_view(request):
     logout(request)
-    messages.success(request, 'You have been logged out successfully.')
     return redirect('accounts:login')
 
 
@@ -244,28 +243,44 @@ def musician_profile_view(request):
 # ============================
 @login_required
 @csrf_protect
-def edit_profile_view(request):
+def edit_musician_profile_view(request):
     user = request.user
     
     if request.method == 'POST':
-        # --- Update user fields from form data ---
-        # Use .get(field, default_value) to keep old value if field is not in POST
-        user.username = request.POST.get('username', user.username)
-        user.location = request.POST.get('location', user.location)
-        user.genres = request.POST.get('genres', user.genres)
-        user.instruments = request.POST.get('instruments', user.instruments)
+        # Get form data
+        new_username = request.POST.get('username', '').strip()
+        new_location = request.POST.get('location', '').strip()
+        new_bio = request.POST.get('bio', '').strip()
+        new_instruments = request.POST.get('instruments', '').strip()
+        new_genres = request.POST.get('genres', '').strip()
+
+        # Validate username if it changed
+        if new_username != user.username:
+            if User.objects.filter(username=new_username).exists():
+                messages.error(request, 'This username is already taken.')
+                return render(request, 'accounts/edit_musician_profile.html', {'user': user})
 
         try:
+            # Update user fields
+            user.username = new_username
+            user.location = new_location
+            user.bio = new_bio
+            user.instruments = new_instruments
+            user.genres = new_genres
             user.save()
-            messages.success(request, 'Profile updated successfully!')
-            return redirect('accounts:musician_profile') 
-        except Exception as e:
-            # Handle potential save errors (e.g., username already taken)
-            messages.error(request, f'An error occurred: {e}')
             
-    # Handle GET request (or POST failure)
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('accounts:musician_profile')
+            
+        except Exception as e:
+            messages.error(request, f'An error occurred while updating your profile: {str(e)}')
+            return render(request, 'accounts/edit_musician_profile.html', {'user': user})
+            
+    # Handle GET request
     context = {
-        'user': user
+        'user': user,
+        'instruments': [x.strip() for x in user.instruments.split(',')] if user.instruments else [],
+        'genres': [x.strip() for x in user.genres.split(',')] if user.genres else []
     }
     return render(request, 'accounts/edit_musician_profile.html', context)
 

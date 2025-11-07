@@ -23,34 +23,57 @@
 
 <body class="bg-white min-h-screen p-8">
     <div id="app" class="max-w-7xl mx-auto">
-        <div id="viewMode">
+        <!-- Nav Bar -->
+        <nav class="bg-white shadow-sm border-b border-gray-200 mb-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo -->
 
-            <!-- Header -->
-            <div class="mb-8 flex items-start justify-between">
-                <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>
-                    <p class="text-gray-600">Manage your musical profile and preferences</p>
+                    <!-- Navigation Links -->
+                    <div class="flex space-x-8 text-sm font-medium text-gray-700">
+                        <a href="{% url 'listings:feed' %}" class="hover:text-[#4F2FC0] transition-colors">
+                            LISTINGS
+                        </a>
+                        <a href="{% url 'accounts:musician_profile' %}" class="text-[#4F2FC0] border-b-2 border-[#4F2FC0] pb-4 -mb-px">
+                            PROFILE
+                        </a>
+                        <a href="{% url 'applications:my_applications' %}" class="hover:text-[#4F2FC0] transition-colors">
+                            APPLICATIONS
+                        </a>
+                        <a href="{% url 'accounts:logout' %}" class="hover:text-[#4F2FC0] transition-colors">
+                            LOGOUT
+                        </a>
+                    </div>
                 </div>
-                <button onclick="switchToEdit()"
-                    class="px-6 py-3 rounded-lg font-semibold text-white transition hover:opacity-90"
-                    style="background-color: var(--primary-color);">
-                    Edit Profile
-                </button>
             </div>
+        </nav>
 
-            <!-- Main Content - Two Column Layout -->
+        <!-- Header -->
+        <div class="mb-8 flex items-start justify-between">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">Edit Profile</h1>
+                <p class="text-gray-600">Manage your musical profile and preferences</p>
+            </div>
+            <button type="submit" form="profile-form"
+                class="px-6 py-3 rounded-lg font-semibold text-white transition hover:opacity-90"
+                style="background-color: var(--primary-color);">
+                Save Changes
+            </button>
+        </div>
+
+        <!-- Main Content Form -->
+        <form id="profile-form" method="POST" class="contents">
+            {% csrf_token %}
+            <!-- Two Column Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                <!-- Left Sidebar -->
+                <!-- Left Sidebar (Preview) -->
                 <div class="lg:col-span-1">
-                    <div class="bg-white border border-gray-200 rounded-2xl p-6">
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 sticky top-8">
                         <!-- Profile Avatar -->
                         <div class="flex justify-center mb-6">
                             <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                        clip-rule="evenodd" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </div>
@@ -60,11 +83,8 @@
 
                         <!-- Location -->
                         <div class="flex items-center justify-center gap-1 text-gray-600 mb-6 text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                    clip-rule="evenodd" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
                             </svg>
                             {{ user.location }}
                         </div>
@@ -72,13 +92,12 @@
                         <!-- Role Section -->
                         <div class="mb-6">
                             <h3 class="font-bold text-gray-900 mb-3">Role</h3>
-                            <span
-                                class="inline-block px-4 py-2 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
+                            <span class="inline-block px-4 py-2 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
                                 {{ user.role }}
                             </span>
                         </div>
 
-                        <!-- Instruments Section -->
+                        <!-- Instruments Section (Live Update) -->
                         <div class="mb-6">
                             <h3 class="font-bold text-gray-900 mb-3">Instruments</h3>
                             <div class="flex flex-wrap gap-2" id="sidebarInstruments">
@@ -92,7 +111,7 @@
                             </div>
                         </div>
 
-                        <!-- Genres Section -->
+                        <!-- Genres Section (Live Update) -->
                         <div>
                             <h3 class="font-bold text-gray-900 mb-3">Genres</h3>
                             <div class="flex flex-wrap gap-2" id="sidebarGenres">
@@ -108,137 +127,7 @@
                     </div>
                 </div>
 
-                <!-- Right Content Area -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white border border-gray-200 rounded-2xl p-8">
-                        <!-- Basic Information Section -->
-                        <h2 class="text-2xl font-bold text-gray-900 mb-8">Basic Information</h2>
-
-                        <!-- Form Grid -->
-                        <div class="space-y-6">
-                            <!-- Username & Email Row -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block font-semibold text-gray-900 mb-2">Username</label>
-                                    <input type="text" value="{{ user.username }}"
-                                        class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
-                                        >
-                                </div>
-                                <div>
-                                    <label class="block font-semibold text-gray-900 mb-2">Email</label>
-                                    <input type="email" value="{{ user.email }}"
-                                        class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
-                                        >
-                                </div>
-                            </div>
-
-                            <!-- Location -->
-                            <div>
-                                <label class="block font-semibold text-gray-900 mb-2">Location</label>
-                                <input type="text" value="{{ user.location }}"
-                                    class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
-                                    readonly>
-                            </div>
-
-                            <!-- Bio -->
-                            <div>
-                                <label class="block font-semibold text-gray-900 mb-2">Bio</label>
-                                <textarea
-                                    class="w-full px-4 py-3 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none h-32 resize-none"
-                                    >{{ user.bio }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Added edit mode section -->
-        <div id="editMode" class="hidden">
-
-            <!-- Header -->
-            <div class="mb-8 flex items-start justify-between">
-                <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Edit Profile</h1>
-                    <p class="text-gray-600">Manage your musical profile and preferences</p>
-                </div>
-                <button onclick="switchToView()"
-                    class="px-6 py-3 rounded-lg font-semibold text-white transition hover:opacity-90"
-                    style="background-color: var(--primary-color);">
-                    Save Changes
-                </button>
-            </div>
-
-            <!-- Main Content - Two Column Layout -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                <!-- Left Sidebar (Live Update) -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white border border-gray-200 rounded-2xl p-6">
-                        <!-- Profile Avatar -->
-                        <div class="flex justify-center mb-6">
-                            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <!-- Username -->
-                        <h2 class="text-xl font-bold text-gray-900 text-center mb-1">@{{ user.username }}</h2>
-
-                        <!-- Location -->
-                        <div class="flex items-center justify-center gap-1 text-gray-600 mb-6 text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            {{ user.location }}
-                        </div>
-
-                        <!-- Role Section -->
-                        <div class="mb-6">
-                            <h3 class="font-bold text-gray-900 mb-3">Role</h3>
-                            <span
-                                class="inline-block px-4 py-2 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
-                                {{ user.role }}
-                            </span>
-                        </div>
-
-                        <!-- Instruments Section (Live Update) -->
-                        <div class="mb-6">
-                            <h3 class="font-bold text-gray-900 mb-3">Instruments</h3>
-                            <div class="flex flex-wrap gap-2" id="editSidebarInstruments">
-                                {% for instrument in user.instruments.split %}
-                                <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
-                                    {{ instrument }}
-                                </span>
-                                {% empty %}
-                                <span class="text-gray-500 text-sm">{{ user.instruments }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        <!-- Genres Section (Live Update) -->
-                        <div>
-                            <h3 class="font-bold text-gray-900 mb-3">Genres</h3>
-                            <div class="flex flex-wrap gap-2" id="editSidebarGenres">
-                                {% for genre in user.genres.split %}
-                                <span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">
-                                    {{ genre }}
-                                </span>
-                                {% empty %}
-                                <span class="text-gray-500 text-sm">{{ user.genres }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+               
                 <!-- Right Content Area -->
                 <div class="lg:col-span-2 space-y-8">
                     <div class="bg-white border border-gray-200 rounded-2xl p-8">
@@ -251,13 +140,13 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block font-semibold text-gray-900 mb-2">Username</label>
-                                    <input type="text" value="{{ user.username }}"
+                                    <input type="text" name="username" value="{{ user.username }}"
                                         class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
                                         >
                                 </div>
                                 <div>
                                     <label class="block font-semibold text-gray-900 mb-2">Email</label>
-                                    <input type="email" value="{{ user.email }}"
+                                    <input type="email" name="email" value="{{ user.email }}" readonly
                                         class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
                                         >
                                 </div>
@@ -266,7 +155,7 @@
                             <!-- Location -->
                             <div>
                                 <label class="block font-semibold text-gray-900 mb-2">Location</label>
-                                <input type="text" value="{{ user.location }}"
+                                <input type="text" name="location" value="{{ user.location }}"
                                     class="w-full px-4 py-2 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none"
                                     >
                             </div>
@@ -274,7 +163,7 @@
                             <!-- Bio -->
                             <div>
                                 <label class="block font-semibold text-gray-900 mb-2">Bio</label>
-                                <textarea
+                                <textarea name="bio"
                                     class="w-full px-4 py-3 bg-gray-100 text-gray-600 rounded-lg border border-gray-200 focus:outline-none h-32 resize-none"
                                     >{{ user.bio }}</textarea>
                             </div>
@@ -302,7 +191,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 
     <script>
@@ -316,12 +205,12 @@
         let selectedInstruments = [...initialInstruments];
         let selectedGenres = [...initialGenres];
 
-        // Initialize edit mode on page load
-        function initEditMode() {
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
             renderInstrumentsGrid();
             renderGenresGrid();
-            updateEditSidebar();
-        }
+            updateSidebar();
+        });
 
         // Render instruments grid with interactive buttons
         function renderInstrumentsGrid() {
@@ -344,9 +233,18 @@
                     ${instrument}
                 `;
 
-
                 button.onclick = () => toggleInstrument(instrument);
                 grid.appendChild(button);
+
+                // Update hidden input for instruments
+                input = document.querySelector('input[name="instruments"]');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'instruments';
+                    document.getElementById('profile-form').appendChild(input);
+                }
+                input.value = selectedInstruments.filter(i => i).join(', ');
             });
         }
 
@@ -367,6 +265,16 @@
 
                 button.onclick = () => toggleGenre(genre);
                 grid.appendChild(button);
+
+                // Update hidden input for genres
+                let input = document.querySelector('input[name="genres"]');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'genres';
+                    document.getElementById('profile-form').appendChild(input);
+                }
+                input.value = selectedGenres.filter(g => g).join(', ');
             });
         }
 
@@ -379,7 +287,7 @@
                 selectedInstruments.push(instrument);
             }
             renderInstrumentsGrid();
-            updateEditSidebar();
+            updateSidebar();
         }
 
         // Toggle genre selection
@@ -391,13 +299,13 @@
                 selectedGenres.push(genre);
             }
             renderGenresGrid();
-            updateEditSidebar();
+            updateSidebar();
         }
 
-        // Update sidebar in edit mode
-        function updateEditSidebar() {
-            const instrumentsContainer = document.getElementById('editSidebarInstruments');
-            const genresContainer = document.getElementById('editSidebarGenres');
+        // Update sidebar
+        function updateSidebar() {
+            const instrumentsContainer = document.getElementById('sidebarInstruments');
+            const genresContainer = document.getElementById('sidebarGenres');
 
             instrumentsContainer.innerHTML = selectedInstruments.map(inst =>
                 `<span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">${inst}</span>`
@@ -406,19 +314,6 @@
             genresContainer.innerHTML = selectedGenres.map(genre =>
                 `<span class="px-3 py-1 bg-gray-100 text-gray-900 text-sm font-medium rounded-full">${genre}</span>`
             ).join('');
-        }
-
-        // Switch to edit mode
-        function switchToEdit() {
-            document.getElementById('viewMode').classList.add('hidden');
-            document.getElementById('editMode').classList.remove('hidden');
-            initEditMode();
-        }
-
-        // Switch to view mode
-        function switchToView() {
-            document.getElementById('viewMode').classList.remove('hidden');
-            document.getElementById('editMode').classList.add('hidden');
         }
     </script>
 </body>
